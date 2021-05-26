@@ -23,7 +23,7 @@ class CreatePenaltiesTable extends Migration
             $table->string('status', 350);
             $table->string('pdf_url', 350);
             $table->unsignedBigInteger('added_by');
-            $table->timestamp('created')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('added_by')->references('id')->on('users');
             $table->foreign('vehicle_id')->references('id')->on('vehicles');
