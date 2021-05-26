@@ -16,7 +16,7 @@ class CreateMenuDataTable extends Migration
         Schema::create('menu_data', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 350);
-            $table->string('data', 1000);
+            $table->text('data', 1000);
             $table->unsignedBigInteger('menu_id');
             $table->unsignedBigInteger('added_by');
             $table->timestamp('created')->default(DB::raw('CURRENT_TIMESTAMP'));
