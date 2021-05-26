@@ -18,7 +18,7 @@ class CreateMenuItemsTable extends Migration
             $table->string('name', 350);
             $table->unsignedBigInteger('menu_id');
             $table->unsignedBigInteger('added_by');
-            $table->timestamp('created')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('menu_id')->references('id')->on('menus');
             $table->foreign('added_by')->references('id')->on('users');

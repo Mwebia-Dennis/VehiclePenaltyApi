@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::post('auth/signup', [AuthController::class, 'signup']);
+Route::post('auth/login', [AuthController::class, 'login']);
+Route::post('auth/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('auth/check-account', [AuthController::class, 'checkEmail']);
+
+
+// Route::middleware('auth:api')->group(function (Request $request) {
+    
+
+
+
+
+// });
+
+
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'Page Not Found. If error persists, contact info@company.com'], 404);
 });
