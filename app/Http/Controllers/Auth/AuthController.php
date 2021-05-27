@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Laravolt\Avatar\Avatar;
+use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
+use Laravel\Passport\Client as OClient;
 
 class AuthController extends Controller
 {
@@ -16,7 +21,7 @@ class AuthController extends Controller
         $remember_me = (isset($request->remember_me))?$request->remember_me:false;
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember_me)) {
             
-            return response()->json(["message" => "Successful login"], 201);
+            return $this->getAccessAndRefreshTokens($request->email, $request->password);
         }
         
         //invalid credentials
@@ -40,9 +45,38 @@ class AuthController extends Controller
         $user->surname = $request->surname;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
+        $profile_img = $this->genereteAvatar($user);
+        $user->profile_img = $profile_img;
 
         $user->save();
         return response()->json(["message" => "successful sign up"], 201);
+    }
+
+    
+    public function getAccessAndRefreshTokens(string $email, string $password) {
+        
+        // echo url('/');
+        try {
+            
+            $oClient = DB::table('oauth_clients')->where('id', 2)->first();
+            $http = new Client();
+
+
+            $response = $http->post('http://127.0.0.1:8001/oauth/token', [
+                'form_params' => [
+                    'grant_type' => 'password',
+                    'client_id' => $oClient->id,
+                    'client_secret' => $oClient->secret,
+                    'username' => $email,
+                    'password' => $password,
+                    'scope' => '*',
+                ],
+            ]);
+
+            return json_decode((string) $response->getBody(), true);
+        }catch(Exception $ex) {
+            return response()->json(["error" => "Sorry an error occurred "+$ex->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
     
     public function forgotPassword(Request $request) {
@@ -86,5 +120,42 @@ class AuthController extends Controller
         }
         return response()->json(["message" => "Could not find email"], 401);
 
+    }
+
+    public function updateProfile(Request $request) {
+        $request->validate($rules = [
+
+            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:50048',
+
+        ]);
+
+        
+        $user = Auth::user();
+        $extension = $request->File('profile_picture')->getClientOriginalExtension();
+        $imagePath = 'profile_picture'. $user->id . '.'.$extension;
+        $image_url = $request->File('profile_picture')->storeAs('storage/image/profile', $imagePath);
+
+        $user->profile_img = asset($image_url);
+        if($user->isDirty()) {
+
+            $user->save();
+
+        }
+        return response()->json(["message" => "profile image updated successfully"], 201);
+    }
+
+
+
+    public function genereteAvatar($user) {
+        $profile_picture = (new Avatar)
+            ->create(strtoupper($user->name))
+            ->getImageObject()
+            ->encode('png');
+
+        
+        Storage::disk('public')->put('profile' . $user->id . '/profile_picture.png',
+            (string)$profile_picture);
+
+        return Storage::url('profile'. $user->id . '/profile_picture.png');
     }
 }

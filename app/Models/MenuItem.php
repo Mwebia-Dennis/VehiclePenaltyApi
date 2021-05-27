@@ -27,6 +27,6 @@ class MenuItem extends Model
     }
     public function addedBy() {
 
-        return $this->belongsTo(User::class, 'id', 'added_by');
+        return $this->belongsTo(User::class, 'added_by', 'id');
     }
 }
