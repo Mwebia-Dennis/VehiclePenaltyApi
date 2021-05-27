@@ -11,7 +11,8 @@ class Vehicle extends Model
     
     protected $fillable = [
         'plate_number',
-        'user_id',
+        'owner_name',
+        'owner_surname',
         'duty_location',
         'unit',
         'added_by',
@@ -19,17 +20,13 @@ class Vehicle extends Model
     ];
 
     protected $with = [
-        'user', 'addedBy',
-    ]
+        'addedBy',
+    ];
 
     
-    public function user() {
-
-        return $this->belongsTo(User::class);
-    }
     public function addedBy() {
 
-        return $this->belongsTo(User::class, 'id', 'added_by');
+        return $this->belongsTo(User::class, 'added_by', 'id');
     }
     public function penalty() {
 
