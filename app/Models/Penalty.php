@@ -9,6 +9,9 @@ class Penalty extends Model
 {
     use HasFactory;
     
+    
+    protected $table = "penalties";
+
     protected $fillable = [
         'vehicle_id',
         'penalty_type',
@@ -25,6 +28,10 @@ class Penalty extends Model
         'vehicle',
     ];
     
+    
+    public function getTableName(){
+        return $this->table;
+    }
     
     public function vehicle() {
 

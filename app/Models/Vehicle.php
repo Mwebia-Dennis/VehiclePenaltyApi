@@ -9,6 +9,9 @@ class Vehicle extends Model
 {
     use HasFactory;
     
+    
+    protected $table = "vehicles";
+
     protected $fillable = [
         'plate_number',
         'owner_name',
@@ -23,6 +26,9 @@ class Vehicle extends Model
         'addedBy',
     ];
 
+    public function getTableName(){
+        return $this->table;
+    }
     
     public function addedBy() {
 
