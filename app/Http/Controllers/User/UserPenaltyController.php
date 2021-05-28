@@ -34,7 +34,7 @@ class UserPenaltyController extends Controller
             'penalty_date' => 'required',
             'payment_date' => 'required',
             'status' => 'required',
-            'pdf' => 'required|mimes:pdf|max:50048',
+            'pdf' => 'mimes:pdf|max:50048',
 
         ]);
         $penalty = new Penalty();
@@ -50,12 +50,15 @@ class UserPenaltyController extends Controller
         $penalty->added_by = $user->id;
         $penalty->addedBy()->associate($penalty->added_by);
 
-        
-        $extension = $request->File('pdf')->getClientOriginalExtension();
-        $pdfPath = md5(uniqid()). $request->vehicle_id.'.'.$extension;
-        $pdf_url = $request->File('pdf')->storeAs('public/pdf', $pdfPath);
-
-        $penalty->pdf_url = asset($pdf_url);
+        $penalty->pdf_url = '';
+        if($request->hasFile('pdf')) {
+            $extension = $request->File('pdf')->getClientOriginalExtension();
+            $pdfPath = md5(uniqid()). $request->vehicle_id.'.'.$extension;
+            $pdf_url = $request->File('pdf')->storeAs('public/pdf', $pdfPath);
+            $pdf_url= 'storage'. substr($pdf_url,strlen('public'));
+    
+            $penalty->pdf_url = asset($pdf_url); 
+        }
 
         $penalty->save();      
 
