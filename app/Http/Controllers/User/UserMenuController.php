@@ -15,7 +15,7 @@ class UserMenuController extends Controller
         
         $request->validate($rules = [
     
-            'name' => 'required|unique:menu',
+            'name' => 'required|unique:menus',
 
         ]);
 

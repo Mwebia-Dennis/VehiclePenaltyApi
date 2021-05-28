@@ -49,6 +49,11 @@ class User extends Authenticatable
 
         return $this->hasMany(Vehicle::class, 'added_by');
     }
+    
+    public function myPenalty() {
+
+        return $this->hasMany(Penalty::class, 'added_by');
+    }
 
     public function myMenuItem() {
 

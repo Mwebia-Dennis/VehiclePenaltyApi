@@ -15,7 +15,6 @@ class CreateMenuDataTable extends Migration
     {
         Schema::create('menu_data', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 350);
             $table->text('data', 1000);
             $table->unsignedBigInteger('menu_id');
             $table->unsignedBigInteger('added_by');

@@ -10,7 +10,6 @@ class MenuData extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'data',
         'menu_id',
         'added_by',
@@ -28,10 +27,10 @@ class MenuData extends Model
     
     public function menu() {
 
-        return $this->belongsTo(MenuItem::class);
+        return $this->belongsTo(Menu::class);
     }
     public function addedBy() {
 
-        return $this->belongsTo(User::class, 'id', 'added_by');
+        return $this->belongsTo(User::class, 'added_by', 'id');
     }
 }

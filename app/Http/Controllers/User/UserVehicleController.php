@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 
+
 class UserVehicleController extends Controller
 {
     public function index($id)
@@ -30,8 +31,6 @@ class UserVehicleController extends Controller
             'unit' => 'required|max:150',
 
         ]);
-
-        return $request->plate_number;
         $vehicle = new Vehicle();
         $vehicle->plate_number = $request->plate_number;
         $vehicle->owner_name = $request->owner_name;
@@ -78,7 +77,7 @@ class UserVehicleController extends Controller
             $vehicle->delete();
             return response()->json(["message" => " Vehicle deleted successfully"], 201);
         }else{
-            return response()->json(["message" => " You cannot delete this vehicle"], 201);
+            return response()->json(["message" => " You cannot delete this vehicle"], 403);
         }
 
     }

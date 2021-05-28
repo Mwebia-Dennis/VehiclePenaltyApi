@@ -10,6 +10,8 @@ class Menu extends Model
     use HasFactory;
 
 
+    protected $table = "menus";
+
     protected $fillable = [
         'name',
         'added_by',
@@ -24,6 +26,10 @@ class Menu extends Model
     public function addedBy() {
 
         return $this->belongsTo(User::class, 'id', 'added_by');
+    }
+    public function menuData() {
+
+        return $this->hasMany(MenuData::class);
     }
 
 }
