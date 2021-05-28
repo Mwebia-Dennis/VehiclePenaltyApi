@@ -18,7 +18,9 @@ class Menu extends Model
 
     ];
 
-    
+    public function getTableName(){
+        return $this->table;
+    }
     public function menuItem() {
 
         return $this->hasMany(MenuItem::class);

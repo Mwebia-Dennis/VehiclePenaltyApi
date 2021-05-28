@@ -24,7 +24,11 @@ class MenuData extends Model
         'menu'
     ];
 
-    
+    protected $table = "menu_data";
+
+    public function getTableName(){
+        return $this->table;
+    }
     public function menu() {
 
         return $this->belongsTo(Menu::class);

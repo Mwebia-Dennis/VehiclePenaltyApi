@@ -10,6 +10,7 @@ class MenuItem extends Model
     use HasFactory;
 
 
+    protected $table = "menu_items";
     protected $fillable = [
         'name',
         'menu_id',
@@ -21,6 +22,9 @@ class MenuItem extends Model
         'menu',
     ];
     
+    public function getTableName(){
+        return $this->table;
+    }
     public function menu() {
 
         return $this->belongsTo(Menu::class);
