@@ -131,15 +131,18 @@ class AuthController extends Controller
 
         
         $user = Auth::user();
-        $extension = $request->File('profile_picture')->getClientOriginalExtension();
-        $imagePath = 'profile_picture'. $user->id . '.'.$extension;
-        $image_url = $request->File('profile_picture')->storeAs('storage/image/profile', $imagePath);
+        if($request->hasFile('profile_picture')) {
+            
+            $extension = $request->File('profile_picture')->getClientOriginalExtension();
+            $imagePath = 'profile_picture'. $user->id . '.'.$extension;
+            $image_url = $request->File('profile_picture')->storeAs('public/profile', $imagePath);
+            $image_url= 'storage'. substr($image_url,strlen('public'));
+            $user->profile_img = asset($image_url);
+            if($user->isDirty()) {
 
-        $user->profile_img = asset($image_url);
-        if($user->isDirty()) {
+                $user->save();
 
-            $user->save();
-
+            }
         }
         return response()->json(["message" => "profile image updated successfully"], 201);
     }

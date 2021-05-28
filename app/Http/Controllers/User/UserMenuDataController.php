@@ -17,6 +17,7 @@ class UserMenuDataController extends Controller
     
             'data' => 'required',
             'menu_id'=> 'required|integer',
+            'pdf' => 'mimes:pdf|max:50048',            
 
         ]);
         
@@ -31,6 +32,16 @@ class UserMenuDataController extends Controller
             $menuData->added_by =$user->id;
             $menuData->addedBy()->associate($menuData->added_by);
             $menuData->menu()->associate($menuData->menu_id);
+            if($request->hasFile('pdf')) {
+                $extension = $request->File('pdf')->getClientOriginalExtension();
+                $pdfPath = md5(uniqid()). $request->vehicle_id.'.'.$extension;
+                $pdf_url = $request->File('pdf')->storeAs('public/pdf', $pdfPath);
+                $pdf_url= 'storage'. substr($pdf_url,strlen('public'));
+        
+                $data = json_decode($menuData->data, true);
+                $data['pdf'] = asset($pdf_url);
+                $menuData->data = json_encode($data);
+            }
     
             $menuData->save();
             return response()->json(["message" => "Data added successfully"], 201);
@@ -93,6 +104,7 @@ class UserMenuDataController extends Controller
         $menu = Menu::find($menuId);
         $menuItems = $menu->menuItem()->get();
         $attr = array_keys($data);
+        $attr[] = "pdf";
 
         $menuItemsValue = [];
         foreach($menuItems as $item) {
