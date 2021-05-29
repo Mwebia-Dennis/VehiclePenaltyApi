@@ -12,7 +12,8 @@
         "laravel/framework": "^8.40",
         "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5",
-        "laravolt/avatar": "^4.1"
+        "laravolt/avatar": "^4.1",
+        "ext-gd":" *"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
