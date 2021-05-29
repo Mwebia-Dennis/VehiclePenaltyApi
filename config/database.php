@@ -79,7 +79,8 @@ return [
         ],
 
         'sqlsrv' => [
-            'driver' => 'sqlsrv',
+            'driver' => 'mysql',
+            // 'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'db4free.net'),
             // 'host' => env('DB_HOST', 'localhost'),
