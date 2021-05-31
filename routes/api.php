@@ -45,12 +45,12 @@ Route::post('auth/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('auth/check-account', [AuthController::class, 'checkEmail']);
 
 
-
-
 Route::middleware('auth:api')->group(function () {
     
 
-
+    //authenticated user info
+    
+    Route::post('auth/user-details', [AuthController::class, 'userDetails']);
 
     Route::post('auth/update-profile', [AuthController::class, 'updateProfile']);
     //users info
