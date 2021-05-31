@@ -15,6 +15,12 @@ use Laravel\Passport\Client as OClient;
 class AuthController extends Controller
 {
     
+    
+    public function userDetails()
+    {
+        return response()->json(Auth::user(), 201);
+    }
+
 
     public function login(Request $request) {
 

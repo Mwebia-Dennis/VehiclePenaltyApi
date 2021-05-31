@@ -14,9 +14,9 @@ class UserController extends Controller
     public function index() {
         return response()->json(User::all());
     }
-    public function show($user_id)
+    public function show(User $user)
     {
-        return response()->json(Auth::user(), 201);
+        return response()->json($user, 201);
     }
     public function update(Request $request, User $user)
     {
