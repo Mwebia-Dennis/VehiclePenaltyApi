@@ -62,8 +62,8 @@ class AuthController extends Controller
             $http = new Client();
 
 
-            $response = $http->post('http://127.0.0.1:8001/oauth/token', [
-                // $response = $http->post(url('/oauth/token'), [
+            //$response = $http->post('http://127.0.0.1:8001/oauth/token', [
+             $response = $http->post(url('/oauth/token'), [
                 'form_params' => [
                     'grant_type' => 'password',
                     'client_id' => $oClient->id,
