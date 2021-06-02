@@ -13,4 +13,9 @@ class MenuController extends Controller
     {
         return response()->json(Menu::all(), 201);
     }
+
+    public function show($menu_id)
+    {
+        return response()->json(Menu::find($menu_id), 201);
+    }
 }
