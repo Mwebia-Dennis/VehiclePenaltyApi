@@ -35,12 +35,6 @@ class UserMenuItemController extends Controller
         if(!in_array("pdf", $menu_item_array)) {
             $menu_item_array[] = "pdf";
         } 
-        if(!in_array("created_at", $menu_item_array)) {
-            $menu_item_array[] = "created_at";
-        } 
-        if(!in_array("added_by", $menu_item_array)) {
-            $menu_item_array[] = "added_by";
-        }
 
         foreach($menu_item_array as $menu_item) {
             $mItem = new MenuItem();
