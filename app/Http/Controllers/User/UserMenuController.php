@@ -24,7 +24,10 @@ class UserMenuController extends Controller
         $menu->name = $request->name;
         $menu->added_by = $user->id;
         $menu->save();
-        return response()->json(["menu added successfully"], 201);
+        return response()->json([
+            "message" => "menu added successfully",
+            "menu_id" => $menu->id
+        ], 201);
 
 
     }
