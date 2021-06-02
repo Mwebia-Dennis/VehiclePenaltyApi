@@ -62,7 +62,7 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::resource('users.menu-item', UserMenuItemController::class)->only(['store', 'index']);
     Route::resource('users.menu-data', UserMenuDataController::class)->only(['store', 'update', 'destroy']);
     Route::resource('menu-item', MenuItemController::class)->only(['index']);
-    Route::resource('menu', MenuController::class)->only(['index']);
+    Route::resource('menu', MenuController::class)->only(['index', 'show']);
     Route::resource('menu.menu-item', MenuEntryController::class)->only(['index']);
     Route::resource('menu.menu-data', Menu_MenuDataController::class)->only(['index']);
     Route::resource('menu.menu-data-search', SearchMenuDataController::class)->only(['index']);
