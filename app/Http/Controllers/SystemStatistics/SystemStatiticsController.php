@@ -71,6 +71,10 @@ class SystemStatiticsController extends Controller
 
     private function getPercentage($oldValue, $newValue) {
 
-        return (($newValue - $oldValue)/$oldValue) * 100;
+        if($oldValue != 0) {
+            //avoid divisibility error by 0
+            return (($newValue - $oldValue)/$oldValue) * 100;
+        }
+        return 0;
     }
 }
