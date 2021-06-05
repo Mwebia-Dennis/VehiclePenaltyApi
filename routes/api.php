@@ -20,6 +20,8 @@ use App\Http\Controllers\Vehicle\VehiclePenaltyController;
 use App\Http\Controllers\Vehicle\SearchVehicleController;
 use App\Http\Controllers\Penalty\PenaltyController;
 use App\Http\Controllers\Penalty\SearchPenaltyController;
+use App\Http\Controllers\SystemStatistics\SystemStatiticsController;
+
 
 
 
@@ -71,6 +73,8 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::resource('penalty', PenaltyController::class)->only(['index']);
     Route::post('penalty-search', [SearchPenaltyController::class, 'index']);
     Route::resource('vehicle.penalty', VehiclePenaltyController::class)->only(['index']);
+    Route::resource('statistics', SystemStatiticsController::class)->only(['index']);
+    
 
 });
 
