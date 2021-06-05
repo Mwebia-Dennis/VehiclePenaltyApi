@@ -27,8 +27,8 @@ class SystemStatiticsController extends Controller
 
         for ($i=0; $i < 7; $i++) { 
             $carbon = Carbon::today()->subDays( $i+1 );
-            $penaltyWeeklydata[] = [$carbon->format('l') => $penalties1->whereDate('created_at' , '=', $carbon)];
-            $vehicleWeeklydata[] = [$carbon->format('l') => $__vehicle->whereDate('created_at' , '=', $carbon)];
+            $penaltyWeeklydata[] = [$carbon->format('l') => $penalties1->whereDate('created_at' , '=', $carbon)->count()];
+            $vehicleWeeklydata[] = [$carbon->format('l') => $__vehicle->whereDate('created_at' , '=', $carbon)->count()];
         }
         //get percentage of new vehicles this month vs previous
         $vehicle = new Vehicle();
@@ -55,6 +55,11 @@ class SystemStatiticsController extends Controller
             'created_at', '=', Carbon::now()->month
         )->count();
 
+        //payment report
+        $___penalty = new Penalty();
+        $paidPayment = $___penalty->where('status', 'paid')->count();
+        $pendingPayment = $___penalty->where('status', 'pending')->count();
+
 
         $data = [
             "todayTotalVehicles" => $todayTotalVehicles,
@@ -65,6 +70,8 @@ class SystemStatiticsController extends Controller
             "vehicleMonthlyIncrease" => $this->getPercentage($lastMonthVehicle,$currentMonthVehicle),
             "penaltiesMonthlyIncrease" => $this->getPercentage($lastMonthPenalties,$currentMonthPenalties),
             "usersMonthlyIncrease" => $this->getPercentage($lastMonthUsers,$currentMonthUsers),
+            "paidPayment" : $paidPayment,
+            "pendingPayment" : $pendingPayment,
         ];
         return response()->json($data, 201);
     }
