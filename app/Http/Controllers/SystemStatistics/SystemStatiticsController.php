@@ -19,10 +19,17 @@ class SystemStatiticsController extends Controller
         $todayTotalPenalties =  Penalty::whereDate('created_at', Carbon::today())->count();
         //get new users as per today
         $todayTotalUsers =  User::whereDate('created_at', Carbon::today())->count();
-        //get total penalties
-        $totalPenalties = Penalty::count();
-        //get total vehicles
-        $totalVehicles = Vehicle::count();
+        //get weekly stats
+        $penalties1 = new Penalty();
+        $__vehicle = new Vehicle();
+        $vehicleWeeklydata = [];
+        $penaltyWeeklydata = [];
+
+        for ($i=0; $i < 7; $i++) { 
+            $carbon = Carbon::today()->subDays( $i+1 );
+            $penaltyWeeklydata[] = [$carbon->format('l') => $penalties1->whereDate('created_at' , '=', $carbon)];
+            $vehicleWeeklydata[] = [$carbon->format('l') => $__vehicle->whereDate('created_at' , '=', $carbon)];
+        }
         //get percentage of new vehicles this month vs previous
         $vehicle = new Vehicle();
         $lastMonthVehicle = $vehicle->whereMonth(
@@ -48,19 +55,22 @@ class SystemStatiticsController extends Controller
             'created_at', '=', Carbon::now()->month
         )->count();
 
+
         $data = [
             "todayTotalVehicles" => $todayTotalVehicles,
             "todayTotalPenalties" => $todayTotalPenalties,
             "todayTotalUsers" => $todayTotalUsers,
-            "totalPenalties" => $totalPenalties,
-            "totalVehicles" => $totalVehicles,
-            "lastMonthVehicle" => $lastMonthVehicle,
-            "currentMonthVehicle" => $currentMonthVehicle,
-            "lastMonthPenalties" => $lastMonthPenalties,
-            "currentMonthPenalties" => $currentMonthPenalties,
-            "lastMonthUsers" => $lastMonthUsers,
-            "currentMonthUsers" => $currentMonthUsers,
+            "vehicleWeeklydata" => $vehicleWeeklydata,
+            "penaltyWeeklydata" => $penaltyWeeklydata,
+            "vehicleMonthlyIncrease" => $this->getPercentage($lastMonthVehicle,$currentMonthVehicle),
+            "penaltiesMonthlyIncrease" => $this->getPercentage($lastMonthPenalties,$currentMonthPenalties),
+            "usersMonthlyIncrease" => $this->getPercentage($lastMonthUsers,$currentMonthUsers),
         ];
         return response()->json($data, 201);
+    }
+
+    private function getPercentage($oldValue, $newValue) {
+
+        return (($newValue - $oldValue)/$oldValue) * 100;
     }
 }
