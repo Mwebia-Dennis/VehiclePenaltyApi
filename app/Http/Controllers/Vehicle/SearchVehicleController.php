@@ -26,7 +26,13 @@ class SearchVehicleController extends Controller
 
         if(in_array($request->column, $columns)) {
 
-            return response()->json($vehicle->where($request->column, 'LIKE', '%'.$request->value.'%')->get(), 201);
+            $vehicle = $vehicle->where($request->column, 'LIKE', '%'.$request->value.'%');
+            if(request()->has('sort_by')) {
+                $vehicle = $vehicle->orderBy(request()->sort_by, 'DESC');
+            }
+            
+            $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+            return response()->json($vehicle->paginate($perPage));
     
         }
         return response()->json(["message", "could not find data"], 403);

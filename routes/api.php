@@ -54,6 +54,7 @@ Route::middleware('auth:api')->group(function () {
 Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     
     Route::post('auth/update-profile', [AuthController::class, 'updateProfile']);
+    Route::post('auth/logout', [AuthController::class, 'logout']);
     //users info
     
     Route::resource('users', UserController::class)->only(['show', 'index', 'update']);

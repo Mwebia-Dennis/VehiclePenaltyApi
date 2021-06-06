@@ -12,7 +12,16 @@ class UserController extends Controller
     
 
     public function index() {
-        return response()->json(User::all());
+
+        
+        $user = new User();
+
+        if(request()->has('sort_by')) {
+            $user = $user->orderBy(request()->sort_by, 'DESC');
+        }
+        
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($user->paginate($perPage));
     }
     public function show(User $user)
     {
