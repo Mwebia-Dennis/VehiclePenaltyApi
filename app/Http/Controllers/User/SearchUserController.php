@@ -26,7 +26,13 @@ class SearchUserController extends Controller
 
         if(in_array($request->column, $columns)) {
 
-            return response()->json($user->where($request->column, 'LIKE', '%'.$request->value.'%')->get(), 201);
+            $user = $user->where($request->column, 'LIKE', '%'.$request->value.'%');
+            if(request()->has('sort_by')) {
+                $user = $user->orderBy(request()->sort_by, 'DESC');
+            }
+            
+            $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+            return response()->json($user->paginate($perPage));
     
         }
         return response()->json(["message", "could not find data"], 403);

@@ -16,8 +16,13 @@ class UserVehicleController extends Controller
         
         $user = Auth::user();
 
+        $user = $user->myVehicle();
+        if(request()->has('sort_by')) {
+            $user = $user->orderBy(request()->sort_by, 'DESC');
+        }
         
-        return response()->json($user->myVehicle()->get(), 201);
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($user->paginate($perPage));
     }
     public function store(Request $request)
     {

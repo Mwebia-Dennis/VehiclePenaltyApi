@@ -10,6 +10,12 @@ class VehicleController extends Controller
 {
     public function index()
     {
-        return response()->json(Vehicle::all(), 201);
+        $vehicle = new Vehicle();
+        if(request()->has('sort_by')) {
+            $vehicle = $vehicle->orderBy(request()->sort_by, 'DESC');
+        }
+        
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($vehicle->paginate($perPage));
     }
 }

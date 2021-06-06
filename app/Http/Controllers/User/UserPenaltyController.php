@@ -21,7 +21,13 @@ class UserPenaltyController extends Controller
         $user = Auth::user();
 
         
-        return response()->json($user->myPenalty()->get(), 201);
+        $user = $user->myPenalty();
+        if(request()->has('sort_by')) {
+            $user = $user->orderBy(request()->sort_by, 'DESC');
+        }
+        
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($user->paginate($perPage));
     }
 
     public function store(Request $request, $user_id)

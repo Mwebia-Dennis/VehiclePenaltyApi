@@ -11,8 +11,13 @@ class VehiclePenaltyController extends Controller
     public function index(Vehicle $vehicle)
     {
 
+        $penalty = $vehicle->penalty();
+        if(request()->has('sort_by')) {
+            $penalty = $penalty->orderBy(request()->sort_by, 'DESC');
+        }
         
-        return response()->json($vehicle->penalty()->get(), 201);
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($penalty->paginate($perPage));
         
     }
 }

@@ -68,8 +68,8 @@ class AuthController extends Controller
             $http = new Client();
 
 
-            //$response = $http->post('http://127.0.0.1:8001/oauth/token', [
-             $response = $http->post(url('/oauth/token'), [
+            $response = $http->post('http://127.0.0.1:8001/oauth/token', [
+            //  $response = $http->post(url('/oauth/token'), [
                 'form_params' => [
                     'grant_type' => 'password',
                     'client_id' => $oClient->id,
@@ -154,7 +154,11 @@ class AuthController extends Controller
         return response()->json(["message" => "profile image updated successfully"], 201);
     }
 
-
+    public function logout(Request $request) {
+        
+        $request->user()->token()->revoke();
+        return response()->json(["message" => 'Successfully logged out'], 201);
+    }
 
     public function genereteAvatar($user) {
         $profile_picture = (new Avatar)

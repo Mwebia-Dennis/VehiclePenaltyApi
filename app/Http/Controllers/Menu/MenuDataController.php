@@ -10,8 +10,13 @@ class MenuDataController extends Controller
 {
     public function index(Menu $menu)
     {
+        $menu = $menu->menuData();
+        if(request()->has('sort_by')) {
+            $menu = $menu->orderBy(request()->sort_by, 'DESC');
+        }
         
-        return response()->json($menu->menuData()->get(), 200);
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($menu->paginate($perPage));
 
 
     }
