@@ -70,8 +70,8 @@ class SystemStatiticsController extends Controller
             "vehicleMonthlyIncrease" => $this->getPercentage($lastMonthVehicle,$currentMonthVehicle),
             "penaltiesMonthlyIncrease" => $this->getPercentage($lastMonthPenalties,$currentMonthPenalties),
             "usersMonthlyIncrease" => $this->getPercentage($lastMonthUsers,$currentMonthUsers),
-            "paidPayment" : $paidPayment,
-            "pendingPayment" : $pendingPayment,
+            "paidPayment" => $paidPayment,
+            "pendingPayment" => $pendingPayment,
         ];
         return response()->json($data, 201);
     }
