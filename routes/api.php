@@ -12,7 +12,7 @@ use App\Http\Controllers\User\UserPenaltyController;
 use App\Http\Controllers\User\UserMenuDataController;
 use App\Http\Controllers\MenuItem\MenuItemController;
 use App\Http\Controllers\Menu\MenuController;
-use App\Http\Controllers\Menu\SearchMenuDataController;
+use App\Http\Controllers\MenuData\SearchMenuDataController;
 use App\Http\Controllers\Menu\MenuItemController as MenuEntryController;
 use App\Http\Controllers\Menu\MenuDataController as Menu_MenuDataController;
 use App\Http\Controllers\Vehicle\VehicleController;
@@ -68,13 +68,13 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::resource('menu', MenuController::class)->only(['index', 'show']);
     Route::resource('menu.menu-item', MenuEntryController::class)->only(['index']);
     Route::resource('menu.menu-data', Menu_MenuDataController::class)->only(['index']);
-    Route::post('menu.menu-data-search', [SearchMenuDataController::class, 'index']);
     Route::resource('vehicle', VehicleController::class)->only(['index']);
     Route::post('vehicles-search', [SearchVehicleController::class, 'index']);
     Route::resource('penalty', PenaltyController::class)->only(['index']);
     Route::post('penalty-search', [SearchPenaltyController::class, 'index']);
     Route::resource('vehicle.penalty', VehiclePenaltyController::class)->only(['index']);
     Route::resource('statistics', SystemStatiticsController::class)->only(['index']);
+    Route::resource('menu-data-search', SearchMenuDataController::class)->only(['index']);
     
 
 });
