@@ -61,7 +61,7 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::post('users-search', [SearchUserController::class, 'index']);
     Route::resource('users.vehicle', UserVehicleController::class)->except(['edit', 'create', 'show']);
     Route::resource('users.penalty', UserPenaltyController::class)->except(['edit', 'create', 'show']);
-    Route::resource('users.menu', UserMenuController::class)->only(['store']);
+    Route::resource('users.menu', UserMenuController::class)->only(['store', 'destroy']);
     Route::resource('users.menu-item', UserMenuItemController::class)->only(['store', 'index']);
     Route::resource('users.menu-data', UserMenuDataController::class)->only(['store', 'update', 'destroy']);
     Route::resource('menu-item', MenuItemController::class)->only(['index']);
