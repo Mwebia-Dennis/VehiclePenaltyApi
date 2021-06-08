@@ -32,7 +32,7 @@ class UserMenuController extends Controller
 
     }
 
-    public function destroy($menu_id) {
+    public function destroy($user_id, $menu_id) {
         $user = Auth::user();
         $menu = Menu::find($menu_id);
         if($menu->added_by == $user->id) {
