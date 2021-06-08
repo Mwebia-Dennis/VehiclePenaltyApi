@@ -31,4 +31,14 @@ class UserMenuController extends Controller
 
 
     }
+
+    public function destroy($menu_id) {
+        $user = Auth::user();
+        $menu = Menu::find($menu_id);
+        if($menu->added_by == $user->id) {
+            $menu->delete();
+            return response()->json("Successfully deleted the menu category", 201);
+        }
+        return response()->json("Sorry could not delete menu. Menu data can only be deleted by respective owner only", 401);
+    }
 }
