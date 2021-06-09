@@ -14,10 +14,17 @@ class Vehicle extends Model
 
     protected $fillable = [
         'plate_number',
-        'owner_name',
-        'owner_surname',
-        'duty_location',
-        'unit',
+        'vehicle_group',
+        'brand_model',
+        'chassis_number',
+        'motor_number',
+        'model_year',
+        'color',
+        'file_number',
+        'tag',
+        'reception_type',
+        'delivery_date',
+        'asset_number',
         'added_by',
 
     ];
@@ -37,5 +44,9 @@ class Vehicle extends Model
     public function penalty() {
 
         return $this->hasMany(Penalty::class);
+    }
+    public function menuData() {
+
+        return $this->hasMany(MenuData::class);
     }
 }

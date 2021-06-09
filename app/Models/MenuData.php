@@ -11,6 +11,7 @@ class MenuData extends Model
 
     protected $fillable = [
         'data',
+        'vehicle_id',
         'menu_id',
         'added_by',
 
@@ -21,13 +22,18 @@ class MenuData extends Model
     ];
 
     protected $with = [
-        'menu'
+        'menu', 
+        'vehicle'
     ];
 
     protected $table = "menu_data";
 
     public function getTableName(){
         return $this->table;
+    }
+    public function vehicle() {
+
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
     }
     public function menu() {
 

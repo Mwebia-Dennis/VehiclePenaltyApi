@@ -16,7 +16,6 @@ class SearchPenaltyController extends Controller
 
         $request->validate($rules = [
     
-            'column' => 'required',
             'value' => 'required',
 
         ]);
@@ -24,18 +23,23 @@ class SearchPenaltyController extends Controller
         $penalty = new Penalty();
         $columns = $this->getTableColumns($penalty->getTableName());
 
-        if(in_array($request->column, $columns)) {
+        $counter = 0;
+        foreach($columns as $name) {
+            if($counter == 0) {
+                
+                $penalty = $penalty->where($name, 'LIKE', '%'.$request->value.'%');
+            }else {
 
-            $penalty = $penalty->where($request->column, 'LIKE', '%'.$request->value.'%');
-            if(request()->has('sort_by')) {
-                $penalty = $penalty->orderBy(request()->sort_by, 'DESC');
+                $penalty = $penalty->orWhere($name, 'LIKE', '%'.$request->value.'%');
             }
-            
-            $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
-            return response()->json($penalty->paginate($perPage));
-    
+            $counter ++;
         }
-        return response()->json(["message", "could not find data"], 403);
+        if(request()->has('sort_by')) {
+            $penalty = $penalty->orderBy(request()->sort_by, 'DESC');
+        }
+        
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($penalty->paginate($perPage), 201);
 
     }
 }

@@ -14,13 +14,24 @@ class Penalty extends Model
 
     protected $fillable = [
         'vehicle_id',
-        'penalty_type',
         'receipt_number',
         'penalty_date',
         'payment_date',
         'status',
+        'notification_date',
+        'penalty_hour',
+        'penalty_article',
+        'penalty',
+        'paying',
+        'source',
+        'unit',
+        'return_id',
+        'pesintutar',
+        'daysisid',
+        'daysisonay',
         'pdf_url',
         'added_by',
+
 
     ];
 
