@@ -16,10 +16,17 @@ class CreateVehiclesTable extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('plate_number', 150)->unique();
-            $table->string('owner_name', 150);
-            $table->string('owner_surname', 150);
-            $table->string('duty_location', 150);
-            $table->string('unit', 150);
+            $table->string('vehicle_group', 300);
+            $table->string('brand_model', 150);
+            $table->string('chassis_number', 150);
+            $table->string('motor_number', 150);
+            $table->string('model_year', 150);
+            $table->string('color', 150);
+            $table->string('file_number', 150);
+            $table->string('tag', 150);
+            $table->string('reception_type', 150);
+            $table->datetime('delivery_date');
+            $table->string('asset_number', 250);
             $table->unsignedBigInteger('added_by');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

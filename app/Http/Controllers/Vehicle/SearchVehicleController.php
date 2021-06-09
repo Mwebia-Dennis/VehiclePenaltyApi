@@ -16,26 +16,29 @@ class SearchVehicleController extends Controller
 
         $request->validate($rules = [
     
-            'column' => 'required',
             'value' => 'required',
 
         ]);
 
         $vehicle = new Vehicle();
         $columns = $this->getTableColumns($vehicle->getTableName());
+        $counter = 0;
+        foreach($columns as $name) {
+            if($counter == 0) {
+                
+                $vehicle = $vehicle->where($name, 'LIKE', '%'.$request->value.'%');
+            }else {
 
-        if(in_array($request->column, $columns)) {
-
-            $vehicle = $vehicle->where($request->column, 'LIKE', '%'.$request->value.'%');
-            if(request()->has('sort_by')) {
-                $vehicle = $vehicle->orderBy(request()->sort_by, 'DESC');
+                $vehicle = $vehicle->orWhere($name, 'LIKE', '%'.$request->value.'%');
             }
-            
-            $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
-            return response()->json($vehicle->paginate($perPage));
-    
+            $counter ++;
         }
-        return response()->json(["message", "could not find data"], 403);
+        if(request()->has('sort_by')) {
+            $vehicle = $vehicle->orderBy(request()->sort_by, 'DESC');
+        }
+        
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($vehicle->paginate($perPage), 201);
 
     }
 }

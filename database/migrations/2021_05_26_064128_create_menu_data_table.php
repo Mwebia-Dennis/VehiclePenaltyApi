@@ -16,11 +16,13 @@ class CreateMenuDataTable extends Migration
         Schema::create('menu_data', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('data', 1000);
+            $table->unsignedBigInteger('vehicle_id');
             $table->unsignedBigInteger('menu_id');
             $table->unsignedBigInteger('added_by');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');;
+            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('added_by')->references('id')->on('users');
         });
     }

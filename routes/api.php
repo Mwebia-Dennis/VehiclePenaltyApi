@@ -69,6 +69,7 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::resource('menu.menu-item', MenuEntryController::class)->only(['index']);
     Route::resource('menu.menu-data', Menu_MenuDataController::class)->only(['index']);
     Route::resource('vehicle', VehicleController::class)->only(['index']);
+    Route::get('all-vehicle-plates', [VehicleController::class, 'getAllPlateNumbers']);
     Route::post('vehicles-search', [SearchVehicleController::class, 'index']);
     Route::resource('penalty', PenaltyController::class)->only(['index']);
     Route::post('penalty-search', [SearchPenaltyController::class, 'index']);

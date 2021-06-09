@@ -35,20 +35,41 @@ class UserPenaltyController extends Controller
         $request->validate($rules = [
     
             'vehicle_id' => 'required|integer',
-            'penalty_type' => 'required',
             'receipt_number' => 'required',
             'penalty_date' => 'required',
-            'payment_date' => 'required',
+            'payment_date'  => 'required',
+            'notification_date' => 'required',
+            'penalty_hour' => 'required',
+            'penalty_article' => 'required|max:350',
+            'penalty' => 'required|max:350',
+            'paying' => 'required|max:350',
+            'source' => 'required|max:350',
+            'unit' => 'required|max:350',
+            'return_id' => 'required|max:350',
+            'pesintutar' => 'required|max:350',
+            'daysisid' => 'required|max:350',
+            'daysisonay' => 'required|max:350',
             'status' => 'required',
             'pdf' => 'mimes:pdf|max:50048',
 
         ]);
         $penalty = new Penalty();
-        $penalty->penalty_type = $request->penalty_type;
         $penalty->receipt_number = $request->receipt_number;
         $penalty->penalty_date = $request->penalty_date;
         $penalty->payment_date = $request->payment_date;
         $penalty->status = $request->status;
+        $penalty->notification_date = $request->notification_date;
+        $penalty->penalty_hour = $request->penalty_hour;
+        $penalty->penalty_article = $request->penalty_article;
+        $penalty->penalty = $request->penalty;
+        $penalty->paying = $request->paying;
+        $penalty->source = $request->source;
+        $penalty->unit = $request->unit;
+        $penalty->return_id = $request->return_id;
+        $penalty->pesintutar = $request->pesintutar;
+        $penalty->daysisid = $request->daysisid;
+        $penalty->daysisonay = $request->daysisonay;
+
         $penalty->vehicle_id = $request->vehicle_id;
         $penalty->vehicle()->associate($penalty->vehicle_id);
 
@@ -76,19 +97,39 @@ class UserPenaltyController extends Controller
         $request->validate($rules = [
     
             'vehicle_id' => 'required',
-            'penalty_type' => 'required',
             'receipt_number' => 'required',
             'penalty_date' => 'required',
-            'payment_date' => 'required',
+            'payment_date'  => 'required',
+            'notification_date' => 'required',
+            'penalty_hour' => 'required',
+            'penalty_article' => 'required|max:350',
+            'penalty' => 'required|max:350',
+            'paying' => 'required|max:350',
+            'source' => 'required|max:350',
+            'unit' => 'required|max:350',
+            'return_id' => 'required|max:350',
+            'pesintutar' => 'required|max:350',
+            'daysisid' => 'required|max:350',
+            'daysisonay' => 'required|max:350',
             'status' => 'required',
 
         ]);
-        $penalty->penalty_type = $request->penalty_type;
         $penalty->receipt_number = $request->receipt_number;
         $penalty->penalty_date = $request->penalty_date;
         $penalty->payment_date = $request->payment_date;
         $penalty->status = $request->status;
         $penalty->vehicle_id = $request->vehicle_id;
+        $penalty->notification_date = $request->notification_date;
+        $penalty->penalty_hour = $request->penalty_hour;
+        $penalty->penalty_article = $request->penalty_article;
+        $penalty->penalty = $request->penalty;
+        $penalty->paying = $request->paying;
+        $penalty->source = $request->source;
+        $penalty->unit = $request->unit;
+        $penalty->return_id = $request->return_id;
+        $penalty->pesintutar = $request->pesintutar;
+        $penalty->daysisid = $request->daysisid;
+        $penalty->daysisonay = $request->daysisonay;
 
         if($penalty->isDirty()) {
             

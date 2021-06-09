@@ -17,6 +17,7 @@ class UserMenuDataController extends Controller
     
             'data' => 'required',
             'menu_id'=> 'required|integer',
+            'vehicle_id'=> 'required|integer',
             'pdf' => 'mimes:pdf|max:50048',            
 
         ]);
@@ -26,10 +27,13 @@ class UserMenuDataController extends Controller
 
             $menuData = new MenuData();
             $menuData->data = $request->data;
+            $menuData->vehicle_id = $request->vehicle_id;
             $menuData->menu_id = $request->menu_id;
     
             $user = Auth::user();
             $menuData->added_by =$user->id;
+            $menuData->vehicle()->associate($menuData->vehicle_id);
+            
             $menuData->addedBy()->associate($menuData->added_by);
             $menuData->menu()->associate($menuData->menu_id);
             if($request->hasFile('pdf')) {

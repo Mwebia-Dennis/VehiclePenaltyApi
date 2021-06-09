@@ -16,26 +16,30 @@ class SearchUserController extends Controller
 
         $request->validate($rules = [
     
-            'column' => 'required',
             'value' => 'required',
 
         ]);
 
         $user = new User();
         $columns = $this->getTableColumns($user->getTableName());
+        
+        $counter = 0;
+        foreach($columns as $name) {
+            if($counter == 0) {
+                
+                $user = $user->where($name, 'LIKE', '%'.$request->value.'%');
+            }else {
 
-        if(in_array($request->column, $columns)) {
-
-            $user = $user->where($request->column, 'LIKE', '%'.$request->value.'%');
-            if(request()->has('sort_by')) {
-                $user = $user->orderBy(request()->sort_by, 'DESC');
+                $user = $user->orWhere($name, 'LIKE', '%'.$request->value.'%');
             }
-            
-            $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
-            return response()->json($user->paginate($perPage));
-    
+            $counter ++;
         }
-        return response()->json(["message", "could not find data"], 403);
+        if(request()->has('sort_by')) {
+            $user = $user->orderBy(request()->sort_by, 'DESC');
+        }
+        
+        $perPage = (request()->has('per_page'))?request()->per_page:env('PER_PAGE');
+        return response()->json($user->paginate($perPage), 201);
 
     }
 }

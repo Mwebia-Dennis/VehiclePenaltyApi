@@ -29,19 +29,33 @@ class UserVehicleController extends Controller
         
         $request->validate($rules = [
     
-            'plate_number' => 'required|unique:vehicles|max:250',
-            'owner_name' => 'required|max:150',
-            'owner_surname' => 'required|max:150',
-            'duty_location' => 'required|max:150',
-            'unit' => 'required|max:150',
+            'plate_number' => 'required|unique:vehicles|max:250',               
+            'vehicle_group' => 'required|max:150',
+            'brand_model' => 'required|max:150',
+            'chassis_number' => 'required|max:150',
+            'motor_number' => 'required|max:150',
+            'model_year'=> 'required|max:150',
+            'color' => 'required|max:150',
+            'file_number' => 'required|max:150',
+            'tag' => 'required|max:150',
+            'reception_type' => 'required|max:150',
+            'delivery_date' => 'required|max:150',
+            'asset_number' => 'required|max:150',
 
         ]);
         $vehicle = new Vehicle();
         $vehicle->plate_number = $request->plate_number;
-        $vehicle->owner_name = $request->owner_name;
-        $vehicle->owner_surname = $request->owner_surname;
-        $vehicle->duty_location = $request->duty_location;
-        $vehicle->unit = $request->unit;
+        $vehicle->vehicle_group = $request->vehicle_group;
+        $vehicle->brand_model = $request->brand_model;
+        $vehicle->chassis_number = $request->chassis_number;
+        $vehicle->motor_number = $request->motor_number;
+        $vehicle->model_year = $request->model_year;
+        $vehicle->color = $request->color;
+        $vehicle->file_number = $request->file_number;
+        $vehicle->tag = $request->tag;
+        $vehicle->reception_type = $request->reception_type;
+        $vehicle->delivery_date = $request->delivery_date;
+        $vehicle->asset_number = $request->asset_number;
 
         $user = Auth::user();
         $vehicle->added_by = $user->id;
@@ -55,25 +69,40 @@ class UserVehicleController extends Controller
 
         $request->validate($rules = [
     
-            'plate_number' => 'required:unique:vehicles',
-            'owner_name' => 'required',
-            'owner_surname' => 'required',
-            'duty_location' => 'required',
-            'unit' => 'required',
+            'plate_number' => 'required:unique:vehicles',               
+            'vehicle_group' => 'required|max:150',
+            'brand_model' => 'required|max:150',
+            'chassis_number' => 'required|max:150',
+            'motor_number' => 'required|max:150',
+            'model_year'=> 'required|max:150',
+            'color' => 'required|max:150',
+            'file_number' => 'required|max:150',
+            'tag' => 'required|max:150',
+            'reception_type' => 'required|max:150',
+            'delivery_date' => 'required|max:150',
+            'asset_number' => 'required|max:150',
 
         ]);
         $vehicle->plate_number = $request->plate_number;
-        $vehicle->owner_name = $request->owner_name;
-        $vehicle->owner_surname = $request->owner_surname;
-        $vehicle->duty_location = $request->duty_location;
-        $vehicle->unit = $request->unit;
+        $vehicle->vehicle_group = $request->vehicle_group;
+        $vehicle->brand_model = $request->brand_model;
+        $vehicle->chassis_number = $request->chassis_number;
+        $vehicle->motor_number = $request->motor_number;
+        $vehicle->model_year = $request->model_year;
+        $vehicle->color = $request->color;
+        $vehicle->file_number = $request->file_number;
+        $vehicle->tag = $request->tag;
+        $vehicle->reception_type = $request->reception_type;
+        $vehicle->delivery_date = $request->delivery_date;
+        $vehicle->asset_number = $request->asset_number;
+
         if($vehicle->isDirty()) {
             
             $vehicle->save();
 
         }
 
-        return response()->json(["message" => " Vehicle added successfully"], 201);
+        return response()->json(["message" => " Vehicle updated successfully"], 201);
     }
     public function destroy($user_id, Vehicle $vehicle)
     {
