@@ -57,8 +57,8 @@ class SystemStatiticsController extends Controller
 
         //payment report
         $___penalty = new Penalty();
-        $paidPayment = $___penalty->where('status', 'paid')->count();
-        $pendingPayment = $___penalty->where('status', 'pending')->count();
+        $paidPayment = $___penalty->where('status', 'Settled')->count();
+        $pendingPayment = $___penalty->where('status', 'Pending')->count();
 
 
         $data = [
