@@ -25,6 +25,7 @@ class CreatePenaltiesTable extends Migration
             $table->string('penalty_article', 350);
             $table->string('penalty', 350);
             $table->string('paying', 350);
+            $table->string('note', 350);
             $table->string('source', 350);
             $table->string('unit', 350);
             $table->string('return_id', 350);
@@ -35,8 +36,8 @@ class CreatePenaltiesTable extends Migration
             $table->unsignedBigInteger('added_by');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->foreign('added_by')->references('id')->on('users');
-            $table->foreign('vehicle_id')->references('id')->on('vehicles');
+            $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
         });
     }
 

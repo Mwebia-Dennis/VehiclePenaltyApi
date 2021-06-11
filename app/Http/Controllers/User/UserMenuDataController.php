@@ -63,6 +63,7 @@ class UserMenuDataController extends Controller
         $request->validate($rules = [
     
             'data' => 'required',
+            'vehicle_id' => 'required'
 
         ]);
 
@@ -74,6 +75,7 @@ class UserMenuDataController extends Controller
         if($areFieldsInDb) {
 
             $menuData->data = $request->data;
+            $menuData->vehicle_id = $request->vehicle_id;
     
             if($menuData->isDirty()) {
                 

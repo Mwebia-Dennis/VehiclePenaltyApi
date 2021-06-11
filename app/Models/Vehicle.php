@@ -21,6 +21,7 @@ class Vehicle extends Model
         'model_year',
         'color',
         'file_number',
+        'note',
         'tag',
         'reception_type',
         'delivery_date',

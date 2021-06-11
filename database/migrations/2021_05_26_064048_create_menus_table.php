@@ -19,6 +19,7 @@ class CreateMenusTable extends Migration
             $table->unsignedBigInteger('added_by');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
