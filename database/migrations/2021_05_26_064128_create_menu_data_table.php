@@ -23,7 +23,7 @@ class CreateMenuDataTable extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-            $table->foreign('added_by')->references('id')->on('users');
+            $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

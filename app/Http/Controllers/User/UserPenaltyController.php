@@ -43,6 +43,7 @@ class UserPenaltyController extends Controller
             'penalty_article' => 'required|max:350',
             'penalty' => 'required|max:350',
             'paying' => 'required|max:350',
+            'note' => 'required|max:350',
             'source' => 'required|max:350',
             'unit' => 'required|max:350',
             'return_id' => 'required|max:350',
@@ -65,6 +66,7 @@ class UserPenaltyController extends Controller
         $penalty->paying = $request->paying;
         $penalty->source = $request->source;
         $penalty->unit = $request->unit;
+        $penalty->note = $request->note;
         $penalty->return_id = $request->return_id;
         $penalty->pesintutar = $request->pesintutar;
         $penalty->daysisid = $request->daysisid;
@@ -108,6 +110,7 @@ class UserPenaltyController extends Controller
             'source' => 'required|max:350',
             'unit' => 'required|max:350',
             'return_id' => 'required|max:350',
+            'note' => 'required|max:350',
             'pesintutar' => 'required|max:350',
             'daysisid' => 'required|max:350',
             'daysisonay' => 'required|max:350',
@@ -119,6 +122,8 @@ class UserPenaltyController extends Controller
         $penalty->payment_date = $request->payment_date;
         $penalty->status = $request->status;
         $penalty->vehicle_id = $request->vehicle_id;
+        $penalty->vehicle()->associate($penalty->vehicle_id);
+        $penalty->note = $request->note;
         $penalty->notification_date = $request->notification_date;
         $penalty->penalty_hour = $request->penalty_hour;
         $penalty->penalty_article = $request->penalty_article;
@@ -146,7 +151,7 @@ class UserPenaltyController extends Controller
         if(Auth::user()->id == $penalty->added_by) {
 
             $penalty->delete();
-            return response()->json(["message" => " Penalty added successfully"], 201);
+            return response()->json(["message" => " Penalty deleted successfully"], 201);
         }
         return response()->json(["message" => " Sorry cannot delete penalty"], 201);
     }
