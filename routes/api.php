@@ -10,6 +10,7 @@ use App\Http\Controllers\User\UserMenuController;
 use App\Http\Controllers\User\UserMenuItemController;
 use App\Http\Controllers\User\UserPenaltyController;
 use App\Http\Controllers\User\UserMenuDataController;
+use App\Http\Controllers\User\UserExcelFileController;
 use App\Http\Controllers\MenuItem\MenuItemController;
 use App\Http\Controllers\Menu\MenuController;
 use App\Http\Controllers\MenuData\SearchMenuDataController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Vehicle\SearchVehicleController;
 use App\Http\Controllers\Penalty\PenaltyController;
 use App\Http\Controllers\Penalty\SearchPenaltyController;
 use App\Http\Controllers\SystemStatistics\SystemStatiticsController;
+use App\Http\Controllers\ExcelFile\ExcelFileController;
 
 
 
@@ -64,6 +66,7 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::resource('users.menu', UserMenuController::class)->only(['store', 'destroy']);
     Route::resource('users.menu-item', UserMenuItemController::class)->only(['store', 'index']);
     Route::resource('users.menu-data', UserMenuDataController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('users.excel-file', UserExcelFileController::class)->only(['store', 'destroy']);
     Route::resource('menu-item', MenuItemController::class)->only(['index']);
     Route::resource('menu', MenuController::class)->only(['index', 'show']);
     Route::resource('menu.menu-item', MenuEntryController::class)->only(['index']);
@@ -76,6 +79,7 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::resource('vehicle.penalty', VehiclePenaltyController::class)->only(['index']);
     Route::resource('statistics', SystemStatiticsController::class)->only(['index']);
     Route::resource('menu-data-search', SearchMenuDataController::class)->only(['index']);
+    Route::resource('excel-file', ExcelFileController::class)->only(['index']);
     
 
 });
