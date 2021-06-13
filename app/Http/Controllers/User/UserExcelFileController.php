@@ -20,27 +20,27 @@ class UserExcelFileController extends Controller
         ]);
 
         
-        $excelFile = new ExcelFile();
-        $excelFile->page_type =$request->page_type;
-    
-        $user = Auth::user();
-        $excelFile->added_by =$user->id;
-        $excelFile->addedBy()->associate($excelFile->added_by);
         
         if($request->hasFile('files')) {
 
             foreach($request->File('files') as $file) {
 
+                $excelFile = new ExcelFile();
+                $excelFile->page_type =$request->page_type;
+            
+                $user = Auth::user();
+                $excelFile->added_by =$user->id;
+                $excelFile->addedBy()->associate($excelFile->added_by);
                 $extension = $file->getClientOriginalExtension();
                 $excelPath = md5(uniqid()).'.'.$extension;
                 $excel_url = $file->storeAs('public/excel', $excelPath);
                 $excel_url= 'storage'. substr($excel_url,strlen('public'));
         
                 $excelFile->file_url = asset($excel_url);
+                $excelFile->save();
             }
         }
 
-        $excelFile->save();
         return response()->json(["message" => "Excel File Uploaded successfully"], 201);
 
 

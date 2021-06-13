@@ -122,7 +122,8 @@ class AuthController extends Controller
         $user = User::where('email', '=', $request->email)->get();
         
         if(sizeof($user) > 0) {
-            return response()->json(["message" => "Email found"], 201);
+            // return response()->json(["message" => "Email found"], 201);
+            return response()->json($user, 201);
         }
         return response()->json(["message" => "Could not find email"], 401);
 
