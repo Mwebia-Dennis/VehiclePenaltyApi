@@ -79,7 +79,7 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::resource('vehicle.penalty', VehiclePenaltyController::class)->only(['index']);
     Route::resource('statistics', SystemStatiticsController::class)->only(['index']);
     Route::resource('menu-data-search', SearchMenuDataController::class)->only(['index']);
-    Route::resource('excel-file', ExcelFileController::class)->only(['index']);
+    Route::resource('excel-file', ExcelFileController::class)->only(['index', 'show']);
     
 
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ExcelFile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ExcelFile;
+use Illuminate\Support\Facades\Storage;
 
 class ExcelFileController extends Controller
 {
@@ -27,6 +28,14 @@ class ExcelFileController extends Controller
             ->paginate($perPage), 
         201);
 
+    }
+
+    
+    public function show($excel_id) {
+
+        $file = ExcelFile::find($excel_id);
+        return Storage::download("public/".explode(url('/')."/storage",$file->file_url)["0"]);
+        
     }
 
     
