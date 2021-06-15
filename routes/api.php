@@ -50,37 +50,41 @@ Route::get('auth/check-account', [AuthController::class, 'checkEmail']);
 Route::get('auth/verify-email/{verification_token}', [AuthController::class, 'emailVerificationHandler']);
 Route::get('auth/verification-resend', [AuthController::class, 'resendingVerificationEmail']);
 
-Route::middleware(['auth:api', 'verified'])->group(function () {
+Route::middleware('auth:api')->group(function () {
     
-
     //authenticated user info
-Route::get('auth/user-details', [AuthController::class, 'userDetails']);
-    
-    Route::post('auth/update-profile', [AuthController::class, 'updateProfile']);
+    Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::post('auth/logout', [AuthController::class, 'logout']);
-    //users info
+
+    Route::middleware('verified')->group(function () {
+
+        Route::post('auth/update-profile', [AuthController::class, 'updateProfile']);
+        //users info
+        
+        Route::resource('users', UserController::class)->only(['show', 'index', 'update']);
+        Route::post('users-search', [SearchUserController::class, 'index']);
+        Route::resource('users.vehicle', UserVehicleController::class)->except(['edit', 'create', 'show']);
+        Route::resource('users.penalty', UserPenaltyController::class)->except(['edit', 'create', 'show']);
+        Route::resource('users.menu', UserMenuController::class)->only(['store', 'destroy']);
+        Route::resource('users.menu-item', UserMenuItemController::class)->only(['store', 'index']);
+        Route::resource('users.menu-data', UserMenuDataController::class)->only(['store', 'update', 'destroy']);
+        Route::resource('users.excel-file', UserExcelFileController::class)->only(['store', 'destroy']);
+        Route::resource('menu-item', MenuItemController::class)->only(['index']);
+        Route::resource('menu', MenuController::class)->only(['index', 'show']);
+        Route::resource('menu.menu-item', MenuEntryController::class)->only(['index']);
+        Route::resource('menu.menu-data', Menu_MenuDataController::class)->only(['index']);
+        Route::resource('vehicle', VehicleController::class)->only(['index']);
+        Route::get('all-vehicle-plates', [VehicleController::class, 'getAllPlateNumbers']);
+        Route::post('vehicles-search', [SearchVehicleController::class, 'index']);
+        Route::resource('penalty', PenaltyController::class)->only(['index']);
+        Route::post('penalty-search', [SearchPenaltyController::class, 'index']);
+        Route::resource('vehicle.penalty', VehiclePenaltyController::class)->only(['index']);
+        Route::resource('statistics', SystemStatiticsController::class)->only(['index']);
+        Route::resource('menu-data-search', SearchMenuDataController::class)->only(['index']);
+        Route::resource('excel-file', ExcelFileController::class)->only(['index', 'show']);
     
-    Route::resource('users', UserController::class)->only(['show', 'index', 'update']);
-    Route::post('users-search', [SearchUserController::class, 'index']);
-    Route::resource('users.vehicle', UserVehicleController::class)->except(['edit', 'create', 'show']);
-    Route::resource('users.penalty', UserPenaltyController::class)->except(['edit', 'create', 'show']);
-    Route::resource('users.menu', UserMenuController::class)->only(['store', 'destroy']);
-    Route::resource('users.menu-item', UserMenuItemController::class)->only(['store', 'index']);
-    Route::resource('users.menu-data', UserMenuDataController::class)->only(['store', 'update', 'destroy']);
-    Route::resource('users.excel-file', UserExcelFileController::class)->only(['store', 'destroy']);
-    Route::resource('menu-item', MenuItemController::class)->only(['index']);
-    Route::resource('menu', MenuController::class)->only(['index', 'show']);
-    Route::resource('menu.menu-item', MenuEntryController::class)->only(['index']);
-    Route::resource('menu.menu-data', Menu_MenuDataController::class)->only(['index']);
-    Route::resource('vehicle', VehicleController::class)->only(['index']);
-    Route::get('all-vehicle-plates', [VehicleController::class, 'getAllPlateNumbers']);
-    Route::post('vehicles-search', [SearchVehicleController::class, 'index']);
-    Route::resource('penalty', PenaltyController::class)->only(['index']);
-    Route::post('penalty-search', [SearchPenaltyController::class, 'index']);
-    Route::resource('vehicle.penalty', VehiclePenaltyController::class)->only(['index']);
-    Route::resource('statistics', SystemStatiticsController::class)->only(['index']);
-    Route::resource('menu-data-search', SearchMenuDataController::class)->only(['index']);
-    Route::resource('excel-file', ExcelFileController::class)->only(['index', 'show']);
+        
+    });
 
     
     
