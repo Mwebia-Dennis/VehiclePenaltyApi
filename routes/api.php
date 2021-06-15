@@ -46,10 +46,11 @@ use App\Http\Controllers\ExcelFile\ExcelFileController;
 Route::post('auth/signup', [AuthController::class, 'signup']);
 Route::post('auth/login', [AuthController::class, 'login']);
 Route::post('auth/forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('auth/check-account', [AuthController::class, 'checkEmail']);
+Route::get('auth/check-account', [AuthController::class, 'checkEmail']);
+Route::get('auth/verify-email/{verification_token}', [AuthController::class, 'emailVerificationHandler']);
+Route::get('auth/verification-resend', [AuthController::class, 'resendingVerificationEmail']);
 
-
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api', 'verified'])->group(function () {
     
 
     //authenticated user info
@@ -80,6 +81,8 @@ Route::get('auth/user-details', [AuthController::class, 'userDetails']);
     Route::resource('statistics', SystemStatiticsController::class)->only(['index']);
     Route::resource('menu-data-search', SearchMenuDataController::class)->only(['index']);
     Route::resource('excel-file', ExcelFileController::class)->only(['index', 'show']);
+
+    
     
 
 });

@@ -11,6 +11,11 @@ use Laravolt\Avatar\Avatar;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
 use Laravel\Passport\Client as OClient;
+use Illuminate\Support\Str;
+use App\Events\EmailVerification;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+
 
 class AuthController extends Controller
 {
@@ -53,8 +58,10 @@ class AuthController extends Controller
         $user->password = bcrypt($request->password);
         $profile_img = $this->genereteAvatar($user);
         $user->profile_img = $profile_img;
+        $user->verification_token = Str::random(30);
 
         $user->save();
+        event(new EmailVerification($user));
         return response()->json(["message" => "successful sign up"], 201);
     }
 
@@ -68,8 +75,8 @@ class AuthController extends Controller
             $http = new Client();
 
 
-            // $response = $http->post('http://127.0.0.1:8001/oauth/token', [
-            $response = $http->post(url('/oauth/token'), [
+            $response = $http->post('http://127.0.0.1:8001/oauth/token', [
+            // $response = $http->post(url('/oauth/token'), [
                 'form_params' => [
                     'grant_type' => 'password',
                     'client_id' => $oClient->id,
@@ -87,27 +94,28 @@ class AuthController extends Controller
     }
     
     public function forgotPassword(Request $request) {
-        
-        $request->validate($rules = [
-
+        $request->validate([
+            'token' => 'required',
             'email' => 'required',
-            'new_password' => 'required|min:6',
-
+            'password' => 'required|min:8|confirmed',
         ]);
-
-        $user = new User();
-        $user = $user->where('email', $request->email)->first();
-        if($user) {
-
-            $user->password = bcrypt($request->new_password);
-        
-            if($user->isDirty()) {
+    
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => bcrypt($password)
+                ])->setRememberToken(Str::random(60));
+    
                 $user->save();
+    
+                event(new PasswordReset($user));
             }
-            return response()->json(["message" => "password changed successfully"], 201);
-        }
-        
-        return response()->json(["message" => "unauthorised"], 401);
+        );
+
+        return $status === Password::PASSWORD_RESET
+                    ? response()->json(["message" => "Password reset successfully, you can proceed to login"], 201)
+                    : response()->json(["message" => "Could not reset password, try again later"], 401);
 
     }
 
@@ -119,12 +127,14 @@ class AuthController extends Controller
 
         ]);
 
-        $user = User::where('email', '=', $request->email)->get();
-        
-        if(sizeof($user) > 0) {
-            return response()->json(["message" => "Email found"], 201);
-        }
-        return response()->json(["message" => "Could not find email"], 401);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+    
+        return $status === Password::RESET_LINK_SENT
+                    ? response()->json(["message" => "A reset password link has been sent to your email"], 201)
+                    : response()->json(["message" => "Could not find account"], 401);
 
     }
 
@@ -170,5 +180,63 @@ class AuthController extends Controller
             (string)$profile_picture);
 
         return Storage::url('profile'. $user->id . '/profile_picture.png');
+    }
+
+    // public function emailVerificationNotice() {
+        
+    //     return response()->json("hello there, check you email and click on the link sent by us to verify email", 401);
+    // }
+    
+    public function emailVerificationHandler($verification_token) {
+        
+        $user = User::where("verification_token", $verification_token)->first();
+        $frontendUrl = (env('FRONTEND_URL'))?env('FRONTEND_URL'): "https://vehicle-penalty-api.herokuapp.com/api/";
+        if(!$user){
+            return redirect()
+                ->away($frontendUrl.'auth/signup')
+                ->with('status', 'invalid verification token or user has already been verified');
+        }
+        if($user->verified == 1) {
+            
+            return redirect()
+                ->away($frontendUrl.'auth/login')
+                ->with('status', 'Account is already verified');
+        }
+        $user->verified = 1;
+        $user->verification_token = null;
+        $user->email_verified_at = now();
+        $user->save();
+        
+        return redirect()
+            ->away($frontendUrl.'auth/login')
+            ->with('status', 'Account has been already verified');
+    }
+
+    
+    public function resendingVerificationEmail(Request $request) {
+        
+        $request->validate([
+            'email'=>'required'
+        ]);
+        $user = User::where('email', $request->email)->first();
+        $frontendUrl = (env('FRONTEND_URL'))?env('FRONTEND_URL'): "https://vehicle-penalty-api.herokuapp.com/api/";
+        
+        if(!$user){
+            return redirect()
+                ->away($frontendUrl.'auth/signup')
+                ->with('status', 'invalid email');
+        }
+        if($user->verified == 1) {
+            
+            return redirect()
+                ->away($frontendUrl.'home')
+                ->with('status', 'Account is already verified');
+        }
+        
+        $user->verification_token = Str::random(30);
+        $user->save();
+        event(new EmailVerification($user));
+        return response()->json("Resending verification email has been successful", 201);
+
     }
 }
