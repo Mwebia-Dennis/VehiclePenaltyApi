@@ -14,6 +14,7 @@ class CreateVehiclesTable extends Migration
     public function up()
     {
         Schema::create('vehicles', function (Blueprint $table) {
+            
             $table->bigIncrements('id');
             $table->string('plate_number', 150)->unique();
             $table->string('vehicle_group', 300);
@@ -25,6 +26,9 @@ class CreateVehiclesTable extends Migration
             $table->string('file_number', 150);
             $table->string('tag', 150);
             $table->string('reception_type', 150);
+            $table->string('unit_garage_status', 150);
+            $table->string('vehicle_status', 150);
+            $table->string('vehicle_type', 150);
             $table->datetime('delivery_date');
             $table->string('asset_number', 250);
             $table->unsignedBigInteger('added_by');

@@ -39,6 +39,9 @@ class UserVehicleController extends Controller
             'file_number' => 'required|max:150',
             'tag' => 'required|max:150',
             'reception_type' => 'required|max:150',
+            'unit_garage_status' => 'required|max:150',
+            'vehicle_status' => 'required|max:150',
+            'vehicle_type' => 'required|max:150',
             'delivery_date' => 'required|max:150',
             'asset_number' => 'required|max:150',
 
@@ -56,6 +59,9 @@ class UserVehicleController extends Controller
         $vehicle->reception_type = $request->reception_type;
         $vehicle->delivery_date = $request->delivery_date;
         $vehicle->asset_number = $request->asset_number;
+        $vehicle->vehicle_type = $request->vehicle_type;
+        $vehicle->vehicle_status = $request->vehicle_status;
+        $vehicle->unit_garage_status = $request->unit_garage_status;
 
         $user = Auth::user();
         $vehicle->added_by = $user->id;
@@ -79,6 +85,9 @@ class UserVehicleController extends Controller
             'file_number' => 'required|max:150',
             'tag' => 'required|max:150',
             'reception_type' => 'required|max:150',
+            'unit_garage_status' => 'required|max:150',
+            'vehicle_status' => 'required|max:150',
+            'vehicle_type' => 'required|max:150',
             'delivery_date' => 'required|max:150',
             'asset_number' => 'required|max:150',
 
@@ -95,6 +104,9 @@ class UserVehicleController extends Controller
         $vehicle->reception_type = $request->reception_type;
         $vehicle->delivery_date = $request->delivery_date;
         $vehicle->asset_number = $request->asset_number;
+        $vehicle->vehicle_type = $request->vehicle_type;
+        $vehicle->vehicle_status = $request->vehicle_status;
+        $vehicle->unit_garage_status = $request->unit_garage_status;
 
         if($vehicle->isDirty()) {
             
