@@ -27,6 +27,9 @@ class Vehicle extends Model
         'delivery_date',
         'asset_number',
         'added_by',
+        'unit_garage_status',
+        'vehicle_status',
+        'vehicle_type',
 
     ];
 

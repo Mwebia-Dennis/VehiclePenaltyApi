@@ -72,6 +72,9 @@ class SystemStatiticsController extends Controller
             "usersMonthlyIncrease" => $this->getPercentage($lastMonthUsers,$currentMonthUsers),
             "paidPayment" => $paidPayment,
             "pendingPayment" => $pendingPayment,
+            "vehicle_unit_garage_status" => $this->getVehicleUnitGarageStatusStats(),
+            "vehicle_status" => $this->getVehicleStatusStats(),
+            "vehicle_type" => $this->getVehicleTypeStats(),
         ];
         return response()->json($data, 201);
     }
@@ -83,5 +86,69 @@ class SystemStatiticsController extends Controller
             return (($newValue - $oldValue)/$oldValue) * 100;
         }
         return 0;
+    }
+
+    private function getVehicleUnitGarageStatusStats() {
+        // unit_garage_status
+
+        $data = [
+            "İstaç A.Ş","İgdaş A.Ş","Avrupa yakası Zabıta","Avrupa yakası Mezarlıklar",
+            "Makine ikmal","Destek Hizmetleri","İsbak A.Ş","Anadolu yakası Zabıta",
+            "Anadolu yakası Mezarlıklar","Ağaç A.Ş","İsfalt A.Ş",
+        ];
+
+        
+        $stats = [];
+
+        foreach($data as $data_type) {
+
+            $vehicle = new Vehicle();
+            $stats[$data_type] = $vehicle->where('unit_garage_status', $data_type)->count();
+
+        }
+        return $stats;
+
+
+    }
+    private function getVehicleStatusStats() {
+        // unit_garage_status
+
+        $data = [
+            "zimmetli degil","bakimda","zimmetli","Serviste",
+        ];
+
+        
+        $stats = [];
+
+        foreach($data as $data_type) {
+
+            $vehicle = new Vehicle();
+            $stats[$data_type] = $vehicle->where('vehicle_status', $data_type)->count();
+
+        }
+        return $stats;
+
+
+    }
+    private function getVehicleTypeStats() {
+        // unit_garage_status
+
+        $data = [
+            "kiralik","resmi","ihale yolu","Protokol",
+            "yedek",
+        ];
+
+        
+        $stats = [];
+
+        foreach($data as $data_type) {
+
+            $vehicle = new Vehicle();
+            $stats[$data_type] = $vehicle->where('vehicle_type', $data_type)->count();
+
+        }
+        return $stats;
+
+
     }
 }
