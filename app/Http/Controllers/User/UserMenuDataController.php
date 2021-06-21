@@ -26,7 +26,9 @@ class UserMenuDataController extends Controller
         if($areFieldsInDb){
 
             $menuData = new MenuData();
-            $menuData->data = $request->data;
+            $menuData->data = json_encode(
+                $this->resolveNullValues(json_decode($request->data, true), $request->menu_id)
+            );
             $menuData->vehicle_id = $request->vehicle_id;
             $menuData->menu_id = $request->menu_id;
     
@@ -36,6 +38,7 @@ class UserMenuDataController extends Controller
             
             $menuData->addedBy()->associate($menuData->added_by);
             $menuData->menu()->associate($menuData->menu_id);
+
             if($request->hasFile('pdf')) {
                 $extension = $request->File('pdf')->getClientOriginalExtension();
                 $pdfPath = md5(uniqid()). $request->vehicle_id.'.'.$extension;
@@ -73,8 +76,14 @@ class UserMenuDataController extends Controller
         $areFieldsInDb = $this->checkFields($request->data, $menuDetails["0"]["id"]);
 
         if($areFieldsInDb) {
-
-            $menuData->data = $request->data;
+ 
+            $menuData->data = json_encode(
+                $this->resolveUpdateNullValues(
+                    json_decode($request->data, true),
+                    $menuDetails["0"]["id"], 
+                    json_decode($menuData->data, true)
+                )
+            );
             $menuData->vehicle_id = $request->vehicle_id;
     
             if($menuData->isDirty()) {
@@ -93,6 +102,7 @@ class UserMenuDataController extends Controller
     public function destroy($user_id, $menuId){
 
         $menuData = MenuData::find($menuId);
+        return $menuId;
         if(Auth::user()->id == $menuData->added_by) {
             $menuData->delete();
             return response()->json(["message" => " Data deleted successfully"], 201);
@@ -127,4 +137,52 @@ class UserMenuDataController extends Controller
 
         return $areAllFieldsInDb;
     }
+
+    private function resolveNullValues($data, $menuId) {
+
+        $menu = Menu::find($menuId);
+        $menuItems = $menu->menuItem()->get();
+        $menuNames = [];
+        foreach ($menuItems as $item) {
+            $menuNames[] = $item['name'];
+        }
+
+        for ($i=0; $i < sizeof($menuNames); $i++) { 
+            //if the column is not in request data, add empty value to database
+            if(!array_key_exists( trim($menuNames[$i]),$data)) {
+                $data += [trim($menuNames[$i]) => ""];
+            }
+
+        }
+
+        return $data;
+    }
+
+    private function resolveUpdateNullValues($data, $menuId, $menuData) {
+
+        $menu = Menu::find($menuId);
+        $menuItems = $menu->menuItem()->get();
+        $menuNames = [];
+        foreach ($menuItems as $item) {
+            $menuNames[] = $item['name'];
+        }
+
+        for ($i=0; $i < sizeof($menuNames); $i++) { 
+            //if the column is not in request data, add empty value to database 
+            //or the previous data in the database
+            if(!array_key_exists( trim($menuNames[$i]),$data)) {
+
+
+                if(array_key_exists(trim($menuNames[$i]), $menuData )){
+                    $data += [trim($menuNames[$i]) => $menuData[trim($menuNames[$i])]];
+                }else {
+                    $data += [trim($menuNames[$i]) => ""];
+                }                
+            }
+
+        }
+
+        return $data;
+    }
+
 }

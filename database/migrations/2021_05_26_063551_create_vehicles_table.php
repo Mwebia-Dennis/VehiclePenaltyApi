@@ -25,12 +25,12 @@ class CreateVehiclesTable extends Migration
             $table->string('color', 150);
             $table->string('file_number', 150);
             $table->string('tag', 150);
-            $table->string('reception_type', 150);
             $table->string('unit_garage_status', 150);
             $table->string('vehicle_status', 150);
             $table->string('vehicle_type', 150);
             $table->datetime('delivery_date');
             $table->string('asset_number', 250);
+            $table->string('equipment', 250);
             $table->unsignedBigInteger('added_by');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
