@@ -23,13 +23,13 @@ class Vehicle extends Model
         'file_number',
         'note',
         'tag',
-        'reception_type',
         'delivery_date',
         'asset_number',
         'added_by',
         'unit_garage_status',
         'vehicle_status',
         'vehicle_type',
+        'equipment',
 
     ];
 

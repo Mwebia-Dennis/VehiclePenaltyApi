@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Penalty;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class UserPenaltyController extends Controller
 {
@@ -35,42 +36,36 @@ class UserPenaltyController extends Controller
         $request->validate($rules = [
     
             'vehicle_id' => 'required|integer',
-            'receipt_number' => 'required',
-            'penalty_date' => 'required',
-            'payment_date'  => 'required',
-            'notification_date' => 'required',
-            'penalty_hour' => 'required',
-            'penalty_article' => 'required|max:350',
-            'penalty' => 'required|max:350',
-            'paying' => 'required|max:350',
-            'note' => 'required|max:350',
-            'source' => 'required|max:350',
-            'unit' => 'required|max:350',
-            'return_id' => 'required|max:350',
-            'pesintutar' => 'required|max:350',
-            'daysisid' => 'required|max:350',
-            'daysisonay' => 'required|max:350',
-            'status' => 'required',
+            'penalty_article' => 'max:350',
+            'penalty' => 'max:350',
+            'paying' => 'max:350',
+            'note' => 'max:350',
+            'source' => 'max:350',
+            'unit' => 'max:350',
+            'return_id' => 'max:350',
+            'pesintutar' => 'max:350',
+            'daysisid' => 'max:350',
+            'daysisonay' => 'max:350',
             'pdf' => 'mimes:pdf|max:50048',
 
         ]);
         $penalty = new Penalty();
-        $penalty->receipt_number = $request->receipt_number;
-        $penalty->penalty_date = $request->penalty_date;
-        $penalty->payment_date = $request->payment_date;
-        $penalty->status = $request->status;
-        $penalty->notification_date = $request->notification_date;
-        $penalty->penalty_hour = $request->penalty_hour;
-        $penalty->penalty_article = $request->penalty_article;
-        $penalty->penalty = $request->penalty;
-        $penalty->paying = $request->paying;
-        $penalty->source = $request->source;
-        $penalty->unit = $request->unit;
-        $penalty->note = $request->note;
-        $penalty->return_id = $request->return_id;
-        $penalty->pesintutar = $request->pesintutar;
-        $penalty->daysisid = $request->daysisid;
-        $penalty->daysisonay = $request->daysisonay;
+        $penalty->receipt_number = $request->has('receipt_number')?$request->receipt_number:"";
+        $penalty->penalty_date = $request->has('penalty_date')?$request->penalty_date:Carbon::now();
+        $penalty->payment_date = $request->has('payment_date')?$request->payment_date:Carbon::now();
+        $penalty->status = $request->has('status')?$request->status:"";
+        $penalty->notification_date = $request->has('notification_date')?$request->notification_date:Carbon::now();
+        $penalty->penalty_hour = $request->has('penalty_hour')?$request->penalty_hour:Carbon::now();
+        $penalty->penalty_article = $request->has('penalty_article')?$request->penalty_article:"";
+        $penalty->penalty = $request->has('penalty')?$request->penalty:"";
+        $penalty->paying = $request->has('paying')?$request->paying:"";
+        $penalty->source = $request->has('source')?$request->source:"";
+        $penalty->unit = $request->has('unit')?$request->unit:"";
+        $penalty->note = $request->has('note')?$request->note:"";
+        $penalty->return_id = $request->has('return_id')?$request->return_id:"";
+        $penalty->pesintutar = $request->has('pesintutar')?$request->pesintutar:"";
+        $penalty->daysisid = $request->has('daysisid')?$request->daysisid:"";
+        $penalty->daysisonay = $request->has('daysisonay')?$request->daysisonay:"";
 
         $penalty->vehicle_id = $request->vehicle_id;
         $penalty->vehicle()->associate($penalty->vehicle_id);
@@ -81,9 +76,9 @@ class UserPenaltyController extends Controller
 
         $penalty->pdf_url = '';
         if($request->hasFile('pdf')) {
-            $extension = $request->File('pdf')->getClientOriginalExtension();
+            $extension = $request->has('equipment')?$request->File('pdf')->getClientOriginalExtension():"";
             $pdfPath = md5(uniqid()). $request->vehicle_id.'.'.$extension;
-            $pdf_url = $request->File('pdf')->storeAs('public/pdf', $pdfPath);
+            $pdf_url = $request->has('equipment')?$request->File('pdf')->storeAs('public/pdf', $pdfPath):"";
             $pdf_url= 'storage'. substr($pdf_url,strlen('public'));
     
             $penalty->pdf_url = asset($pdf_url); 
@@ -98,44 +93,36 @@ class UserPenaltyController extends Controller
     {
         $request->validate($rules = [
     
-            'vehicle_id' => 'required',
-            'receipt_number' => 'required',
-            'penalty_date' => 'required',
-            'payment_date'  => 'required',
-            'notification_date' => 'required',
-            'penalty_hour' => 'required',
-            'penalty_article' => 'required|max:350',
-            'penalty' => 'required|max:350',
-            'paying' => 'required|max:350',
-            'source' => 'required|max:350',
-            'unit' => 'required|max:350',
-            'return_id' => 'required|max:350',
-            'note' => 'required|max:350',
-            'pesintutar' => 'required|max:350',
-            'daysisid' => 'required|max:350',
-            'daysisonay' => 'required|max:350',
-            'status' => 'required',
+            'vehicle_id' => 'required|integer',
+            'penalty_article' => 'max:350',
+            'penalty' => 'max:350',
+            'paying' => 'max:350',
+            'note' => 'max:350',
+            'source' => 'max:350',
+            'unit' => 'max:350',
+            'return_id' => 'max:350',
+            'pesintutar' => 'max:350',
+            'daysisid' => 'max:350',
+            'daysisonay' => 'max:350',
 
         ]);
-        $penalty->receipt_number = $request->receipt_number;
-        $penalty->penalty_date = $request->penalty_date;
-        $penalty->payment_date = $request->payment_date;
-        $penalty->status = $request->status;
-        $penalty->vehicle_id = $request->vehicle_id;
-        $penalty->vehicle()->associate($penalty->vehicle_id);
-        $penalty->note = $request->note;
-        $penalty->notification_date = $request->notification_date;
-        $penalty->penalty_hour = $request->penalty_hour;
-        $penalty->penalty_article = $request->penalty_article;
-        $penalty->penalty = $request->penalty;
-        $penalty->paying = $request->paying;
-        $penalty->source = $request->source;
-        $penalty->unit = $request->unit;
-        $penalty->return_id = $request->return_id;
-        $penalty->pesintutar = $request->pesintutar;
-        $penalty->daysisid = $request->daysisid;
-        $penalty->daysisonay = $request->daysisonay;
-
+        $penalty->receipt_number = $request->has('receipt_number')?$request->receipt_number:$penalty->receipt_number;
+        $penalty->penalty_date = $request->has('penalty_date')?$request->penalty_date:$penalty->penalty_date;
+        $penalty->payment_date = $request->has('payment_date')?$request->payment_date:$penalty->payment_date;
+        $penalty->status = $request->has('status')?$request->status:$penalty->status;
+        $penalty->notification_date = $request->has('notification_date')?$request->notification_date:$penalty->notification_date;
+        $penalty->penalty_hour = $request->has('penalty_hour')?$request->penalty_hour:$penalty->penalty_hour;
+        $penalty->penalty_article = $request->has('penalty_article')?$request->penalty_article:$penalty->penalty_article;
+        $penalty->penalty = $request->has('penalty')?$request->penalty:$penalty->penalty;
+        $penalty->paying = $request->has('paying')?$request->paying:$penalty->paying;
+        $penalty->source = $request->has('source')?$request->source:$penalty->source;
+        $penalty->unit = $request->has('unit')?$request->unit:$penalty->unit;
+        $penalty->note = $request->has('note')?$request->note:$penalty->note;
+        $penalty->return_id = $request->has('return_id')?$request->return_id:$penalty->return_id;
+        $penalty->pesintutar = $request->has('pesintutar')?$request->pesintutar:$penalty->pesintutar;
+        $penalty->daysisid = $request->has('daysisid')?$request->daysisid:$penalty->daysisid;
+        $penalty->daysisonay = $request->has('daysisonay')?$request->daysisonay:$penalty->daysisonay;
+        
         if($penalty->isDirty()) {
             
             $penalty->vehicle()->associate($penalty->vehicle_id);    
