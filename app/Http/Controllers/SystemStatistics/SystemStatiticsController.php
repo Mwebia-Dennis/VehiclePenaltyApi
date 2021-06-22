@@ -19,6 +19,8 @@ class SystemStatiticsController extends Controller
         $todayTotalPenalties =  Penalty::whereDate('created_at', Carbon::today())->count();
         //get new users as per today
         $todayTotalUsers =  User::whereDate('created_at', Carbon::today())->count();
+        //get total vehicles in system
+        $totalVehicles =  Vehicle::count();
         //get weekly stats
         $penalties1 = new Penalty();
         $__vehicle = new Vehicle();
@@ -65,6 +67,7 @@ class SystemStatiticsController extends Controller
             "todayTotalVehicles" => $todayTotalVehicles,
             "todayTotalPenalties" => $todayTotalPenalties,
             "todayTotalUsers" => $todayTotalUsers,
+            "totalVehicles" => $totalVehicles,
             "vehicleWeeklydata" => $vehicleWeeklydata,
             "penaltyWeeklydata" => $penaltyWeeklydata,
             "vehicleMonthlyIncrease" => $this->getPercentage($lastMonthVehicle,$currentMonthVehicle),
