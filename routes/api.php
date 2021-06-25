@@ -23,6 +23,8 @@ use App\Http\Controllers\Penalty\PenaltyController;
 use App\Http\Controllers\Penalty\SearchPenaltyController;
 use App\Http\Controllers\SystemStatistics\SystemStatiticsController;
 use App\Http\Controllers\ExcelFile\ExcelFileController;
+use App\Http\Controllers\User\UserPdfFileController;
+use App\Http\Controllers\pdf\PDFController;
 
 
 
@@ -64,7 +66,9 @@ Route::middleware('auth:api')->group(function () {
         Route::resource('users', UserController::class)->only(['show', 'index', 'update']);
         Route::post('users-search', [SearchUserController::class, 'index']);
         Route::resource('users.vehicle', UserVehicleController::class)->except(['edit', 'create', 'show']);
-        Route::resource('users.penalty', UserPenaltyController::class)->except(['edit', 'create', 'show']);
+        Route::resource('users.penalty', UserPenaltyController::class)->except(['edit', 'create', 'show', 'update']);
+        Route::post('users/{user_id}/penalty/{penalty_id}', [UserPenaltyController::class, 'update']);
+
         Route::resource('users.menu', UserMenuController::class)->only(['store', 'destroy']);
         Route::resource('users.menu-item', UserMenuItemController::class)->only(['store', 'index']);
         Route::resource('users.menu-data', UserMenuDataController::class)->only(['store', 'update', 'destroy']);
@@ -82,6 +86,9 @@ Route::middleware('auth:api')->group(function () {
         Route::resource('statistics', SystemStatiticsController::class)->only(['index']);
         Route::resource('menu-data-search', SearchMenuDataController::class)->only(['index']);
         Route::resource('excel-file', ExcelFileController::class)->only(['index', 'show']);
+        Route::resource('users.pdf-file', UserPdfFileController::class)->only(['store', 'destroy']);
+        Route::resource('pdf-file', PDFController::class)->only(['index']);
+        Route::get('pdf-file-search', [PDFController::class, 'search']);
     
         
     });

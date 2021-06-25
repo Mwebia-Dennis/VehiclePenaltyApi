@@ -43,6 +43,6 @@ class UserController extends Controller
         if($user->isDirty()) {
             $user->save();
         }
-        return response()->json(["message" => "Profile Details updated successfully"], 201);
+        return response()->json(["message" => "Profil Ayrıntıları başarıyla güncellendi"], 201);
     }
 }

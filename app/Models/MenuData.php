@@ -23,7 +23,8 @@ class MenuData extends Model
 
     protected $with = [
         'menu', 
-        'vehicle'
+        'vehicle',
+        'addedBy'
     ];
 
     protected $table = "menu_data";

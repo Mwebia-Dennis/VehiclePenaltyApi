@@ -48,6 +48,6 @@ class UserMenuItemController extends Controller
             
         }
 
-        return response()->json(["menu item added successfully"], 201);
+        return response()->json(["menü öğesi başarıyla eklendi"], 201);
     }
 }

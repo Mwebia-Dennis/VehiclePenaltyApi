@@ -25,7 +25,7 @@ class UserMenuController extends Controller
         $menu->added_by = $user->id;
         $menu->save();
         return response()->json([
-            "message" => "menu added successfully",
+            "message" => "Talep ettiginiz menü başarıyla eklendi",
             "menu_id" => $menu->id
         ], 201);
 
@@ -37,8 +37,8 @@ class UserMenuController extends Controller
         $menu = Menu::find($menu_id);
         if($menu->added_by == $user->id) {
             $menu->delete();
-            return response()->json("Successfully deleted the menu category", 201);
+            return response()->json("Menü kategorisi başarıyla silindi", 201);
         }
-        return response()->json("Sorry could not delete menu. Menu data can only be deleted by respective owner only", 401);
+        return response()->json("Maalesef menü silinemedi. Menü verileri yalnızca ilgili sahibi tarafından silinebilir", 401);
     }
 }

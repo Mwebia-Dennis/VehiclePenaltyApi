@@ -69,7 +69,7 @@ class UserVehicleController extends Controller
         $vehicle->addedBy()->associate($vehicle->added_by);
         $vehicle->save();
 
-        return response()->json(["message" => " Vehicle added successfully"], 201);
+        return response()->json(["message" => " Araç başarıyla eklendi"], 201);
     }
     public function update(Request $request, $user_id, Vehicle $vehicle)
     {
@@ -116,16 +116,16 @@ class UserVehicleController extends Controller
 
         }
 
-        return response()->json(["message" => " Vehicle updated successfully"], 201);
+        return response()->json(["message" => "  Araç başarıyla güncellendi"], 201);
     }
     public function destroy($user_id, Vehicle $vehicle)
     {
         $user = Auth::user();
         if($user->id == $vehicle->added_by){
             $vehicle->delete();
-            return response()->json(["message" => " Vehicle deleted successfully"], 201);
+            return response()->json(["message" => " Araç başarıyla silindi"], 201);
         }else{
-            return response()->json(["message" => " You cannot delete this vehicle"], 403);
+            return response()->json(["message" => " Eklemediğiniz bir aracı silemezsiniz"], 403);
         }
 
     }

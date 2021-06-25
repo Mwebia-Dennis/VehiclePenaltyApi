@@ -23,20 +23,27 @@ class Penalty extends Model
         'penalty_article',
         'penalty',
         'paying',
-        'source',
+        'cancelation_status',
         'unit',
-        'return_id',
-        'pesintutar',
-        'daysisid',
-        'daysisonay',
+        'company',
+        'request_no',
+        'unit_no',
+        'imm_no',
         'pdf_url',
         'added_by',
+        'name',
+        'registration_date',
+        'arrival_date',
+        'decision_date',
+        'payment_amount',
+        'image_url',
 
 
     ];
 
     protected $with = [
         'vehicle',
+        'addedBy',
     ];
     
     

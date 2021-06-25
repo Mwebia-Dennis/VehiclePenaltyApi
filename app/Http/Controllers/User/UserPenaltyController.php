@@ -36,36 +36,33 @@ class UserPenaltyController extends Controller
         $request->validate($rules = [
     
             'vehicle_id' => 'required|integer',
-            'penalty_article' => 'max:350',
-            'penalty' => 'max:350',
-            'paying' => 'max:350',
-            'note' => 'max:350',
-            'source' => 'max:350',
-            'unit' => 'max:350',
-            'return_id' => 'max:350',
-            'pesintutar' => 'max:350',
-            'daysisid' => 'max:350',
-            'daysisonay' => 'max:350',
             'pdf' => 'mimes:pdf|max:50048',
 
         ]);
         $penalty = new Penalty();
         $penalty->receipt_number = $request->has('receipt_number')?$request->receipt_number:"";
-        $penalty->penalty_date = $request->has('penalty_date')?$request->penalty_date:Carbon::now();
+        $penalty->penalty_date = $request->has('penalty_date')?$request->penalty_date:"";
         $penalty->payment_date = $request->has('payment_date')?$request->payment_date:Carbon::now();
         $penalty->status = $request->has('status')?$request->status:"";
-        $penalty->notification_date = $request->has('notification_date')?$request->notification_date:Carbon::now();
-        $penalty->penalty_hour = $request->has('penalty_hour')?$request->penalty_hour:Carbon::now();
+        $penalty->notification_date = $request->has('notification_date')?$request->notification_date:"";
+        $penalty->penalty_hour = $request->has('penalty_hour')?$request->penalty_hour:"";
         $penalty->penalty_article = $request->has('penalty_article')?$request->penalty_article:"";
         $penalty->penalty = $request->has('penalty')?$request->penalty:"";
         $penalty->paying = $request->has('paying')?$request->paying:"";
-        $penalty->source = $request->has('source')?$request->source:"";
+        $penalty->cancelation_status = $request->has('cancelation_status')?$request->cancelation_status:"";
         $penalty->unit = $request->has('unit')?$request->unit:"";
         $penalty->note = $request->has('note')?$request->note:"";
-        $penalty->return_id = $request->has('return_id')?$request->return_id:"";
-        $penalty->pesintutar = $request->has('pesintutar')?$request->pesintutar:"";
-        $penalty->daysisid = $request->has('daysisid')?$request->daysisid:"";
-        $penalty->daysisonay = $request->has('daysisonay')?$request->daysisonay:"";
+        $penalty->company = $request->has('company')?$request->company:"";
+        $penalty->request_no = $request->has('request_no')?$request->request_no:"";
+        $penalty->unit_no = $request->has('unit_no')?$request->unit_no:"";
+        $penalty->imm_no = $request->has('imm_no')?$request->imm_no:"";
+        $penalty->name = $request->has('name')?$request->name:"";
+        $penalty->registration_date = $request->has('registration_date')?$request->registration_date:"";
+        $penalty->arrival_date = $request->has('arrival_date')?$request->arrival_date:"";
+        $penalty->decision_date = $request->has('decision_date')?$request->decision_date:"";
+        $penalty->payment_amount = $request->has('payment_amount')?$request->payment_amount:"";
+        $pdf_url = $request->has('equipment')?$request->equipment:"";
+        $penalty->image_url = "";
 
         $penalty->vehicle_id = $request->vehicle_id;
         $penalty->vehicle()->associate($penalty->vehicle_id);
@@ -76,53 +73,91 @@ class UserPenaltyController extends Controller
 
         $penalty->pdf_url = '';
         if($request->hasFile('pdf')) {
-            $extension = $request->has('equipment')?$request->File('pdf')->getClientOriginalExtension():"";
+            $extension = $request->File('pdf')->getClientOriginalExtension();
             $pdfPath = md5(uniqid()). $request->vehicle_id.'.'.$extension;
-            $pdf_url = $request->has('equipment')?$request->File('pdf')->storeAs('public/pdf', $pdfPath):"";
+            $pdf_url = $request->File('pdf')->storeAs('public/pdf', $pdfPath);
             $pdf_url= 'storage'. substr($pdf_url,strlen('public'));
-    
+            
             $penalty->pdf_url = asset($pdf_url); 
         }
 
         $penalty->save();      
 
-        return response()->json(["message" => " Penalty added successfully"], 201);
+        return response()->json(["message" => " Penaltı başarıyla eklendi"], 201);
     }
 
-    public function update(Request $request,$user_id, Penalty $penalty)
+    public function update(Request $request,$user_id,  $penalty_id)
     {
         $request->validate($rules = [
     
             'vehicle_id' => 'required|integer',
-            'penalty_article' => 'max:350',
-            'penalty' => 'max:350',
-            'paying' => 'max:350',
-            'note' => 'max:350',
-            'source' => 'max:350',
-            'unit' => 'max:350',
-            'return_id' => 'max:350',
-            'pesintutar' => 'max:350',
-            'daysisid' => 'max:350',
-            'daysisonay' => 'max:350',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:100048',
 
         ]);
-        $penalty->receipt_number = $request->has('receipt_number')?$request->receipt_number:$penalty->receipt_number;
-        $penalty->penalty_date = $request->has('penalty_date')?$request->penalty_date:$penalty->penalty_date;
-        $penalty->payment_date = $request->has('payment_date')?$request->payment_date:$penalty->payment_date;
-        $penalty->status = $request->has('status')?$request->status:$penalty->status;
-        $penalty->notification_date = $request->has('notification_date')?$request->notification_date:$penalty->notification_date;
-        $penalty->penalty_hour = $request->has('penalty_hour')?$request->penalty_hour:$penalty->penalty_hour;
-        $penalty->penalty_article = $request->has('penalty_article')?$request->penalty_article:$penalty->penalty_article;
-        $penalty->penalty = $request->has('penalty')?$request->penalty:$penalty->penalty;
-        $penalty->paying = $request->has('paying')?$request->paying:$penalty->paying;
-        $penalty->source = $request->has('source')?$request->source:$penalty->source;
-        $penalty->unit = $request->has('unit')?$request->unit:$penalty->unit;
-        $penalty->note = $request->has('note')?$request->note:$penalty->note;
-        $penalty->return_id = $request->has('return_id')?$request->return_id:$penalty->return_id;
-        $penalty->pesintutar = $request->has('pesintutar')?$request->pesintutar:$penalty->pesintutar;
-        $penalty->daysisid = $request->has('daysisid')?$request->daysisid:$penalty->daysisid;
-        $penalty->daysisonay = $request->has('daysisonay')?$request->daysisonay:$penalty->daysisonay;
-        
+
+        $penalty = Penalty::find($penalty_id);
+        if($request->has('receipt_number')) {
+            $penalty->receipt_number = $request->receipt_number;
+        }
+        if($request->has('penalty_date')) {
+            $penalty->penalty_date = $request->penalty_date;
+        }if($request->has('payment_date')) {
+            $penalty->payment_date = $request->payment_date;
+        }if($request->has('status')) {
+            $penalty->status = $request->status;
+        }if($request->has('notification_date')) {
+            $penalty->notification_date = $request->notification_date;
+        }if($request->has('penalty_hour')) {
+            $penalty->penalty_hour = $request->penalty_hour;
+        }if($request->has('penalty_article')) {
+            $penalty->penalty_article = $request->penalty_article;
+        }if($request->has('penalty')) {
+            $penalty->penalty = $request->penalty;
+        }if($request->has('paying')) {
+            $penalty->paying = $request->paying;
+        }if($request->has('cancelation_status')) {
+            $penalty->cancelation_status = $request->cancelation_status;
+        }if($request->has('unit')) {
+            $penalty->unit = $request->unit;
+        }if($request->has('note')) {
+            $penalty->note = $request->note;
+        }if($request->has('company')) {
+            $penalty->company = $request->company;
+        }if($request->has('request_no')) {
+            $penalty->request_no = $request->request_no;
+        }
+        if($request->has('unit_no')) {
+            $penalty->unit_no = $request->unit_no;
+        }if($request->has('imm_no')) {
+            $penalty->imm_no = $request->imm_no;
+        }if($request->has('name')) {
+            $penalty->name = $request->name;
+        }if($request->has('registration_date')) {
+            $penalty->registration_date = $request->registration_date;
+        }if($request->has('arrival_date')) {
+            $penalty->arrival_date = $request->arrival_date;
+        }
+        if($request->has('decision_date')) {
+            $penalty->decision_date = $request->decision_date;
+        }
+        if($request->has('payment_amount')) {
+            $penalty->payment_amount = $request->payment_amount;
+        }
+        if($request->has('pdf_url')) {
+            $penalty->pdf_url = $request->pdf_url;
+        }
+
+        $penalty->added_by = $penalty->added_by;
+        if($request->hasFile('image')) {
+            
+            $extension = $request->File('image')->getClientOriginalExtension();
+            $imagePath = md5(uniqid()). '.'.$extension;
+            $image_url = $request->File('image')->storeAs('public/penalty_images', $imagePath);
+            $image_url= 'storage'. substr($image_url,strlen('public'));
+            $penalty->image_url = asset($image_url);
+        }
+
+
         if($penalty->isDirty()) {
             
             $penalty->vehicle()->associate($penalty->vehicle_id);    
@@ -130,7 +165,7 @@ class UserPenaltyController extends Controller
 
         }    
 
-        return response()->json(["message" => " Penalty updated successfully"], 201);
+        return response()->json(["message" => " Ceza başarıyla güncellendi"], 201);
     }
 
     public function destroy($user_id,Penalty $penalty)
@@ -138,8 +173,9 @@ class UserPenaltyController extends Controller
         if(Auth::user()->id == $penalty->added_by) {
 
             $penalty->delete();
-            return response()->json(["message" => " Penalty deleted successfully"], 201);
+            return response()->json(["message" => " Penaltı başarıyla silindi"], 201);
         }
-        return response()->json(["message" => " Sorry cannot delete penalty"], 201);
+        return response()->json(["message" => " Maalesef ceza silinemez"], 201);
     }
 }
+

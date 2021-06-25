@@ -51,11 +51,11 @@ class UserMenuDataController extends Controller
             }
     
             $menuData->save();
-            return response()->json(["message" => "Data added successfully"], 201);
+            return response()->json(["message" => "Veriler başarıyla eklendi"], 201);
 
         }
         
-        return response()->json(["message" => "Sorry could not find fields in db"], 403);
+        return response()->json(["message" => "Maalesef db'de alanlar bulunamadı, daha fazla bilgi için yönetici ile iletişime geçin"], 403);
 
     }
 
@@ -93,10 +93,10 @@ class UserMenuDataController extends Controller
             }
     
     
-            return response()->json(["message" => " Data updated successfully"], 201);
+            return response()->json(["message" => " Veriler başarıyla güncellendi"], 201);
 
         }
-        return response()->json(["message" => "Sorry could not find fields in db"], 403);
+        return response()->json(["message" => "Maalesef db'de alanlar bulunamadı, daha fazla bilgi için yönetici ile iletişime geçin"], 403);
     }
 
     public function destroy($user_id, $menuId){
@@ -105,10 +105,10 @@ class UserMenuDataController extends Controller
         return $menuId;
         if(Auth::user()->id == $menuData->added_by) {
             $menuData->delete();
-            return response()->json(["message" => " Data deleted successfully"], 201);
+            return response()->json(["message" => " Veriler başarıyla silindi"], 201);
         }else{
             
-            return response()->json(["message" => " Data could not be deleted"], 403);
+            return response()->json(["message" => " Veriler silinemedi"], 403);
         }
     }
 
