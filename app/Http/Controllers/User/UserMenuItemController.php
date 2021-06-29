@@ -28,10 +28,7 @@ class UserMenuItemController extends Controller
         $user = Auth::user();
         $menu_item_array = explode(',', $request->name);
 
-        //add new two columns 
-        if(!in_array("plate_number", $menu_item_array)) {
-            $menu_item_array[] = "plate_number";
-        } 
+        //add new pdf columns 
         if(!in_array("pdf", $menu_item_array)) {
             $menu_item_array[] = "pdf";
         } 

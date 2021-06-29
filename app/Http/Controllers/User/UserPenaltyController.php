@@ -35,14 +35,14 @@ class UserPenaltyController extends Controller
     {
         $request->validate($rules = [
     
-            'vehicle_id' => 'required|integer',
-            'pdf' => 'mimes:pdf|max:50048',
+            'plate_number' => 'required',
+            'pdf' => 'mimes:pdf|max:500048',
 
         ]);
         $penalty = new Penalty();
         $penalty->receipt_number = $request->has('receipt_number')?$request->receipt_number:"";
         $penalty->penalty_date = $request->has('penalty_date')?$request->penalty_date:"";
-        $penalty->payment_date = $request->has('payment_date')?$request->payment_date:Carbon::now();
+        $penalty->payment_date = $request->has('payment_date')?$request->payment_date:"";
         $penalty->status = $request->has('status')?$request->status:"";
         $penalty->notification_date = $request->has('notification_date')?$request->notification_date:"";
         $penalty->penalty_hour = $request->has('penalty_hour')?$request->penalty_hour:"";
@@ -64,8 +64,7 @@ class UserPenaltyController extends Controller
         $pdf_url = $request->has('equipment')?$request->equipment:"";
         $penalty->image_url = "";
 
-        $penalty->vehicle_id = $request->vehicle_id;
-        $penalty->vehicle()->associate($penalty->vehicle_id);
+        $penalty->plate_number = $request->plate_number;
 
         $user = Auth::user();
         $penalty->added_by = $user->id;
@@ -90,12 +89,14 @@ class UserPenaltyController extends Controller
     {
         $request->validate($rules = [
     
-            'vehicle_id' => 'required|integer',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:100048',
 
         ]);
 
         $penalty = Penalty::find($penalty_id);
+        if($request->has('plate_number')) {
+            $penalty->plate_number = $request->plate_number;
+        }
         if($request->has('receipt_number')) {
             $penalty->receipt_number = $request->receipt_number;
         }
@@ -159,8 +160,7 @@ class UserPenaltyController extends Controller
 
 
         if($penalty->isDirty()) {
-            
-            $penalty->vehicle()->associate($penalty->vehicle_id);    
+                
             $penalty->save();
 
         }    

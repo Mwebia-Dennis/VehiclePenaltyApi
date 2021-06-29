@@ -14,7 +14,7 @@ class UserPdfFileController extends Controller
     public function store(Request $request, $user_id) {
 
         $request->validate($rules = [        
-            'files' => 'required|distinct:strict|array|min:1|max:8',
+            'files' => 'required|distinct:strict|array|min:1|max:20',
             'files.*' => 'max:10000000|mimes:pdf',
         ]);
 

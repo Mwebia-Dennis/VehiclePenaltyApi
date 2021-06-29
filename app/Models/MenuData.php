@@ -23,7 +23,6 @@ class MenuData extends Model
 
     protected $with = [
         'menu', 
-        'vehicle',
         'addedBy'
     ];
 
@@ -31,10 +30,6 @@ class MenuData extends Model
 
     public function getTableName(){
         return $this->table;
-    }
-    public function vehicle() {
-
-        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
     }
     public function menu() {
 

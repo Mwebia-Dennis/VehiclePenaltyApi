@@ -15,7 +15,7 @@ class CreatePenaltiesTable extends Migration
     {
         Schema::create('penalties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('vehicle_id');
+            $table->string('plate_number', 350);
             $table->string('receipt_number', 350)->default('');
             $table->string('penalty_date', 350)->default('');
             $table->string('penalty_hour', 350)->default('');
@@ -34,7 +34,7 @@ class CreatePenaltiesTable extends Migration
             $table->string('cancelation_status', 350)->default('');
             $table->string('decision_date', 350)->default('');
             $table->string('status', 350)->default('');
-            $table->date('payment_date');
+            $table->string('payment_date', 350);
             $table->string('paying', 350)->default('');
             $table->string('note', 350)->default('');
             $table->string('pdf_url', 350)->default('');
@@ -43,7 +43,6 @@ class CreatePenaltiesTable extends Migration
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
         });
     }
 

@@ -45,10 +45,6 @@ class Vehicle extends Model
 
         return $this->belongsTo(User::class, 'added_by', 'id');
     }
-    public function penalty() {
-
-        return $this->hasMany(Penalty::class);
-    }
     public function menuData() {
 
         return $this->hasMany(MenuData::class);

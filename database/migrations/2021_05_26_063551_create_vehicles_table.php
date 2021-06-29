@@ -28,7 +28,7 @@ class CreateVehiclesTable extends Migration
             $table->string('unit_garage_status', 150);
             $table->string('vehicle_status', 150);
             $table->string('vehicle_type', 150);
-            $table->datetime('delivery_date');
+            $table->string('delivery_date', 150);
             $table->string('asset_number', 250);
             $table->string('equipment', 250);
             $table->unsignedBigInteger('added_by');

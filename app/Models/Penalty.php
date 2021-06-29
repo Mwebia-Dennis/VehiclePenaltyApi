@@ -13,7 +13,7 @@ class Penalty extends Model
     protected $table = "penalties";
 
     protected $fillable = [
-        'vehicle_id',
+        'plate_number',
         'receipt_number',
         'penalty_date',
         'payment_date',
@@ -42,7 +42,6 @@ class Penalty extends Model
     ];
 
     protected $with = [
-        'vehicle',
         'addedBy',
     ];
     
@@ -51,10 +50,6 @@ class Penalty extends Model
         return $this->table;
     }
     
-    public function vehicle() {
-
-        return $this->belongsTo(Vehicle::class);
-    }
     public function addedBy() {
 
         return $this->belongsTo(User::class, 'added_by', 'id');
