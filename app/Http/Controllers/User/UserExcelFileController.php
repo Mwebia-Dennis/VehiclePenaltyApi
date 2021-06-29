@@ -41,7 +41,7 @@ class UserExcelFileController extends Controller
             }
         }
 
-        return response()->json(["message" => "Excel File Uploaded successfully"], 201);
+        return response()->json(["message" => "Excel Dosyası Başarıyla Yüklendi"], 201);
 
 
     }
@@ -52,10 +52,10 @@ class UserExcelFileController extends Controller
         $excelFile = ExcelFile::find($excelFile_id);
         if(Auth::user()->id == $excelFile->added_by) {
             $excelFile->delete();
-            return response()->json(["message" => " File deleted successfully"], 201);
+            return response()->json(["message" => "Dosya başarıyla silindi"], 201);
         }else{
             
-            return response()->json(["message" => " File could not be deleted"], 403);
+            return response()->json(["message" => " Dosya silinemedi"], 403);
         }
     }
 

@@ -18,7 +18,7 @@ class SystemStatiticsController extends Controller
         //get new penalties as per today
         $todayTotalPenalties =  Penalty::whereDate('created_at', Carbon::today())->count();
         //get new users as per today
-        $todayTotalUsers =  User::whereDate('created_at', Carbon::today())->count();
+        $totalPenalties =  Penalty::count();
         //get total vehicles in system
         $totalVehicles =  Vehicle::count();
         //get weekly stats
@@ -59,14 +59,14 @@ class SystemStatiticsController extends Controller
 
         //payment report
         $___penalty = new Penalty();
-        $paidPayment = $___penalty->where('status', 'Settled')->count();
-        $pendingPayment = $___penalty->where('status', 'Pending')->count();
+        $paidPayment = $___penalty->where('status', 'Beklemende')->count();
+        $pendingPayment = $___penalty->where('status', 'Odendi')->count();
 
 
         $data = [
             "todayTotalVehicles" => $todayTotalVehicles,
             "todayTotalPenalties" => $todayTotalPenalties,
-            "todayTotalUsers" => $todayTotalUsers,
+            "totalPenalties" => $totalPenalties,
             "totalVehicles" => $totalVehicles,
             "vehicleWeeklydata" => $vehicleWeeklydata,
             "penaltyWeeklydata" => $penaltyWeeklydata,

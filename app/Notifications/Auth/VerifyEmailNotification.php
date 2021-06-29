@@ -44,13 +44,14 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
         $url = url('/api/auth/verify-email/' . $notifiable->verification_token);
         return (new MailMessage)
                     
-                ->subject('Confirm your account')
-                ->greeting('Hello ' . ucwords($notifiable->name))
-                ->line('You registered an account at ' .
-                    env('APP_NAME') .
-                    ', before being able to use your account you need to verify that this is your email address by clicking here.')
-                ->action('Confirm Account', url($url))
-                ->salutation('Thanks! – The ' . env('APP_NAME') . ' Team');
+                ->subject('Hesabını onayla')
+                ->greeting('Merhaba ' . ucwords($notifiable->name))
+                ->line(env('APP_NAME') .
+                    'de bir hesap açtınız, hesabınızı kullanabilmek için
+                    buraya tıklayarak bunun e-posta adresiniz olduğunu doğrulamanız gerekiyor.')
+                ->action('Hesabı Onaylayın
+                ', url($url))
+                ->salutation('Teşekkürler ' . env('APP_NAME') . ' EKİBİ');
     }
 
     /**

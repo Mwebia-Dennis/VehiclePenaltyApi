@@ -62,7 +62,7 @@ class AuthController extends Controller
 
         $user->save();
         event(new EmailVerification($user));
-        return response()->json(["message" => "successful sign up"], 201);
+        return response()->json(["message" => "başarılı kayıt"], 201);
     }
 
     
@@ -71,23 +71,32 @@ class AuthController extends Controller
         // echo url('/');
         try {
             
-            $oClient = DB::table('oauth_clients')->where('id', 2)->first();
-            $http = new Client();
+            // $oClient = DB::table('oauth_clients')->where('id', 2)->first();
+            // $http = new Client();
 
 
-            // $response = $http->post('http://127.0.0.1:8001/oauth/token', [
-            $response = $http->post(url('/oauth/token'), [
-                'form_params' => [
-                    'grant_type' => 'password',
-                    'client_id' => $oClient->id,
-                    'client_secret' => $oClient->secret,
-                    'username' => $email,
-                    'password' => $password,
-                    'scope' => '*',
-                ],
-            ]);
+            // $response = $http->post(url('/oauth/token'), [
+            //     'form_params' => [
+            //         'grant_type' => 'password',
+            //         'client_id' => $oClient->id,
+            //         'client_secret' => $oClient->secret,
+            //         'username' => $email,
+            //         'password' => $password,
+            //         'scope' => '*',
+            //     ],
+            // ]);
 
-            return json_decode((string) $response->getBody(), true);
+            // return json_decode((string) $response->getBody(), true);
+
+            $__user = new User();
+            $user = $__user->where('email', $email)->first();
+
+            // Creating a token without scopes...
+            $token = $user->createToken('Token Name')->accessToken;
+
+            return response()->json(["access_token" => $token], 201);
+
+
         }catch(Exception $ex) {
             return response()->json(["error" => "Sorry an error occurred "+$ex->getMessage()], Response::HTTP_BAD_REQUEST);
         }
@@ -114,8 +123,8 @@ class AuthController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-                    ? response()->json(["message" => "Password reset successfully, you can proceed to login"], 201)
-                    : response()->json(["message" => "Could not reset password, try again later"], 401);
+                    ? response()->json(["message" => "Şifre başarıyla sıfırlandı, giriş yapmaya devam edebilirsiniz"], 201)
+                    : response()->json(["message" => "Şifre sıfırlanamadı, daha sonra tekrar deneyin"], 401);
 
     }
 
@@ -133,8 +142,8 @@ class AuthController extends Controller
         );
     
         return $status === Password::RESET_LINK_SENT
-                    ? response()->json(["message" => "A reset password link has been sent to your email"], 201)
-                    : response()->json(["message" => "Could not find account"], 401);
+                    ? response()->json(["message" => "E-postanıza bir şifre sıfırlama bağlantısı gönderildi"], 201)
+                    : response()->json(["message" => "Hesap bulunamadı"], 401);
 
     }
 
@@ -160,13 +169,13 @@ class AuthController extends Controller
 
             }
         }
-        return response()->json(["message" => "profile image updated successfully"], 201);
+        return response()->json(["message" => "profil resmi başarıyla güncellendi"], 201);
     }
 
     public function logout(Request $request) {
         
         $request->user()->token()->revoke();
-        return response()->json(["message" => 'Successfully logged out'], 201);
+        return response()->json(["message" => 'Başarıyla çıkış yapıldı'], 201);
     }
 
     public function genereteAvatar($user) {
@@ -190,17 +199,17 @@ class AuthController extends Controller
     public function emailVerificationHandler($verification_token) {
         
         $user = User::where("verification_token", $verification_token)->first();
-        $frontendUrl = (env('FRONTEND_URL'))?env('FRONTEND_URL'): "https://vehicle-penalty-api.herokuapp.com/api/";
+        $frontendUrl = (env('FRONTEND_URL'))?env('FRONTEND_URL'): "https://oguzhansenyigit.com/";
         if(!$user){
             return redirect()
                 ->away($frontendUrl.'auth/signup')
-                ->with('status', 'invalid verification token or user has already been verified');
+                ->with('status', 'geçersiz doğrulama jetonu veya kullanıcı zaten doğrulandı');
         }
         if($user->verified == 1) {
             
             return redirect()
                 ->away($frontendUrl.'auth/login')
-                ->with('status', 'Account is already verified');
+                ->with('status', 'Hesap zaten doğrulandı');
         }
         $user->verified = 1;
         $user->verification_token = null;
@@ -209,7 +218,7 @@ class AuthController extends Controller
         
         return redirect()
             ->away($frontendUrl.'auth/login')
-            ->with('status', 'Account has been already verified');
+            ->with('status', 'Hesap zaten doğrulandı');
     }
 
     
@@ -224,19 +233,19 @@ class AuthController extends Controller
         if(!$user){
             return redirect()
                 ->away($frontendUrl.'auth/signup')
-                ->with('status', 'invalid email');
+                ->with('status', 'Geçersiz e-posta');
         }
         if($user->verified == 1) {
             
             return redirect()
                 ->away($frontendUrl.'home')
-                ->with('status', 'Account is already verified');
+                ->with('status', 'Hesap zaten doğrulandı');
         }
         
         $user->verification_token = Str::random(30);
         $user->save();
         event(new EmailVerification($user));
-        return response()->json("Resending verification email has been successful", 201);
+        return response()->json("Doğrulama e-postasının yeniden gönderilmesi başarılı oldu", 201);
 
     }
 }

@@ -5,35 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MenuData extends Model
+class PdfFiles extends Model
 {
     use HasFactory;
 
+    protected $table = "pdf";
+
     protected $fillable = [
-        'data',
-        'vehicle_id',
-        'menu_id',
+        'file_url',
         'added_by',
 
     ];
-
-    protected $casts = [
-        'data' => 'array'
-    ];
-
     protected $with = [
-        'menu', 
-        'addedBy'
-    ];
+        'addedBy',
 
-    protected $table = "menu_data";
+    ];
 
     public function getTableName(){
         return $this->table;
-    }
-    public function menu() {
-
-        return $this->belongsTo(Menu::class);
     }
     public function addedBy() {
 

@@ -34,7 +34,15 @@ class ExcelFileController extends Controller
     public function show($excel_id) {
 
         $file = ExcelFile::find($excel_id);
-        return Storage::download("public/".explode(url('/')."/storage",$file->file_url)["0"]);
+        
+        $file_name = basename($file->file_url);
+         echo file_get_contents($file->file_url);
+        return "true";
+        if(file_put_contents( $file_name,file_get_contents($file->file_url))) {
+            return response()->json(["message" => "dosya başarıyla indirildi"], 200);
+        }else {
+            return response()->json(["message" => "dosya indirilemedi"], 401);
+        }
         
     }
 
